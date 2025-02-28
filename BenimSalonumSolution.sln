@@ -1,0 +1,46 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.12.35728.132
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BenimSalonumDesktop", "BenimSalonumDesktop\BenimSalonumDesktop.csproj", "{E429BA42-85E1-4411-A425-A1D76B86E9C9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BenimSalonumAPI", "BenimSalonumAPI\BenimSalonumAPI.csproj", "{5B5953B3-7100-4CA6-899F-E1704625646E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BenimSalonum.Entities", "BenimSalonum.Entitites\BenimSalonum.Entities.csproj", "{2CFE2244-273B-44FB-845D-5E951DC67C37}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BenimSalonum.Tools", "BenimSalonum.Tools\BenimSalonum.Tools.csproj", "{50000659-6F07-4797-AAE1-B8ECF84E5F80}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SetDatabasePassword", "SetDatabasePassword\SetDatabasePassword.csproj", "{67B56FE0-1C8C-40EB-8979-B69B0D7D1E47}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E429BA42-85E1-4411-A425-A1D76B86E9C9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E429BA42-85E1-4411-A425-A1D76B86E9C9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E429BA42-85E1-4411-A425-A1D76B86E9C9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E429BA42-85E1-4411-A425-A1D76B86E9C9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5B5953B3-7100-4CA6-899F-E1704625646E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5B5953B3-7100-4CA6-899F-E1704625646E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5B5953B3-7100-4CA6-899F-E1704625646E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5B5953B3-7100-4CA6-899F-E1704625646E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2CFE2244-273B-44FB-845D-5E951DC67C37}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2CFE2244-273B-44FB-845D-5E951DC67C37}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2CFE2244-273B-44FB-845D-5E951DC67C37}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2CFE2244-273B-44FB-845D-5E951DC67C37}.Release|Any CPU.Build.0 = Release|Any CPU
+		{50000659-6F07-4797-AAE1-B8ECF84E5F80}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{50000659-6F07-4797-AAE1-B8ECF84E5F80}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{50000659-6F07-4797-AAE1-B8ECF84E5F80}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{50000659-6F07-4797-AAE1-B8ECF84E5F80}.Release|Any CPU.Build.0 = Release|Any CPU
+		{67B56FE0-1C8C-40EB-8979-B69B0D7D1E47}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{67B56FE0-1C8C-40EB-8979-B69B0D7D1E47}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{67B56FE0-1C8C-40EB-8979-B69B0D7D1E47}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{67B56FE0-1C8C-40EB-8979-B69B0D7D1E47}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
