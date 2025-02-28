@@ -14,14 +14,16 @@ using BenimSalonumAPI.DataAccess;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// 🔹 **Swagger Servislerini Ekleyelim**
+// 🔹 **Swagger Servislerini ve API Tanımlamalarını Ekleyelim**
 builder.Services.AddControllers();
-builder.Services.AddScoped(typeof(IRepository<>), typeof(DataAccess<>));
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "BenimSalonum API", Version = "v1" });
 });
+
+// 📌 Repository'yi Dependency Injection'a Ekle
+builder.Services.AddScoped(typeof(IRepository<>), typeof(DataAccess<>));
 
 // 🔹 **Yetkilendirme & Kimlik Doğrulama**
 builder.Services.AddAuthorization();
@@ -33,20 +35,20 @@ builder.WebHost.ConfigureKestrel((context, options) =>
     options.Configure(context.Configuration.GetSection("Kestrel"));
 });
 
-// 🔹 **1. Şifreyi Oku & Çöz**
+// 🔹 **1️⃣ Şifreyi Oku & Çöz**
 var encryptedPassword = builder.Configuration["DatabaseSettings:Password"]
     ?? throw new InvalidOperationException("Şifre bulunamadı! Lütfen `SetDatabasePassword` ile şifre belirleyin.");
 
 var decryptedPassword = AesEncryption.Decrypt(encryptedPassword)
     ?? throw new InvalidOperationException("Şifre çözülemedi! Lütfen `SetDatabasePassword` ile şifreyi tekrar belirleyin.");
 
-// 🔹 **2. Connection String'i Oku & Güncelle**
+// 🔹 **2️⃣ Connection String'i Oku & Güncelle**
 var connectionStringTemplate = builder.Configuration.GetConnectionString("DefaultConnection")
     ?? throw new InvalidOperationException("ConnectionStrings:DefaultConnection eksik!");
 
 string finalConnectionString = connectionStringTemplate.Replace("ENC(YOUR_ENCRYPTED_PASSWORD_HERE)", decryptedPassword);
 
-// 🔹 **3. DbContext Konfigurasyonu**
+// 🔹 **3️⃣ DbContext Konfigurasyonu**
 builder.Services.AddDbContext<BenimSalonumContext>(options =>
     options.UseSqlServer(finalConnectionString));
 
@@ -74,12 +76,12 @@ using (var scope = app.Services.CreateScope())
     {
         Console.ForegroundColor = ConsoleColor.Yellow;
         Console.WriteLine("✅ TEST VERİLERİ YÜKLENİYOR..");
-        Console.ResetColor(); // Rengi sıfırlar
-            
+        Console.ResetColor();
+
         await TrialData.SeedAsync(dbContext);
         Console.ForegroundColor = ConsoleColor.Green;
         Console.WriteLine("✅ TEST VERİLERİ YÜKLENDİ - BAŞARILI ");
-        Console.ResetColor(); // Rengi sıfırlar
+        Console.ResetColor();
 
     }
     catch (Exception ex)
