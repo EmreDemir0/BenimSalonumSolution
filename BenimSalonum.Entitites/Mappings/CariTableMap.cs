@@ -9,7 +9,9 @@ namespace BenimSalonum.Mappings
         public void Configure(EntityTypeBuilder<CariTable> builder)
         {
             builder.HasKey(x => x.Id);
-            
+            builder.Property(x => x.CariAdi).IsRequired().HasMaxLength(100);
+            builder.ToTable("Cariler");
+
         }
     }
 }

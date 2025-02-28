@@ -1,69 +1,94 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using BenimSalonumAPI.DataAccess.Context;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
-using BenimSalonum.Tools;
 using Microsoft.Extensions.Configuration;
 using Microsoft.OpenApi.Models;
+using Microsoft.Data.SqlClient;
+using BenimSalonumAPI.DataAccess.Context;
+using BenimSalonum.Tools;
+using BenimSalonum.API.Extensions;
+using BenimSalonum.DataAccess.SeedData;
+using System;
+using BenimSalonum.Entities.Interfaces;
+using BenimSalonum.Entities.Tables;
+using BenimSalonumAPI.DataAccess;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// **Swagger servislerini ekleyelim**
+// 🔹 **Swagger Servislerini Ekleyelim**
 builder.Services.AddControllers();
+builder.Services.AddScoped(typeof(IRepository<>), typeof(DataAccess<>));
+builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "BenimSalonum API", Version = "v1" });
 });
 
+// 🔹 **Yetkilendirme & Kimlik Doğrulama**
 builder.Services.AddAuthorization();
 builder.Services.AddAuthentication();
 
+// 🔹 **Kestrel Yapılandırması**
 builder.WebHost.ConfigureKestrel((context, options) =>
 {
     options.Configure(context.Configuration.GetSection("Kestrel"));
 });
 
-// **🔹 1. `DatabaseSettings:Password` içindeki şifreyi oku**
-var encryptedPassword = builder.Configuration["DatabaseSettings:Password"];
+// 🔹 **1. Şifreyi Oku & Çöz**
+var encryptedPassword = builder.Configuration["DatabaseSettings:Password"]
+    ?? throw new InvalidOperationException("Şifre bulunamadı! Lütfen `SetDatabasePassword` ile şifre belirleyin.");
 
-if (string.IsNullOrWhiteSpace(encryptedPassword))
-{
-    Console.WriteLine("[HATA] DatabaseSettings:Password değeri API içinde bulunamadı!");
-    throw new InvalidOperationException("Şifre bulunamadı! Lütfen `SetDatabasePassword` ile şifre belirleyin.");
-}
+var decryptedPassword = AesEncryption.Decrypt(encryptedPassword)
+    ?? throw new InvalidOperationException("Şifre çözülemedi! Lütfen `SetDatabasePassword` ile şifreyi tekrar belirleyin.");
 
-Console.WriteLine($"[DEBUG] API İçin Okunan Şifre: {encryptedPassword}");
+// 🔹 **2. Connection String'i Oku & Güncelle**
+var connectionStringTemplate = builder.Configuration.GetConnectionString("DefaultConnection")
+    ?? throw new InvalidOperationException("ConnectionStrings:DefaultConnection eksik!");
 
-// **🔹 2. Şifreyi çöz**
-string decryptedPassword = AesEncryption.Decrypt(encryptedPassword);
-
-if (string.IsNullOrWhiteSpace(decryptedPassword))
-{
-    Console.WriteLine("[HATA] Şifre çözme başarısız oldu! Bağlantı dizesi oluşturulamadı.");
-    throw new InvalidOperationException("Şifre çözülemedi! Lütfen `SetDatabasePassword` ile şifreyi tekrar belirleyin.");
-}
-
-Console.WriteLine($"[DEBUG] Çözülen Şifre: {decryptedPassword}");
-
-// **🔹 3. ConnectionString'i oku ve şifreyi entegre et**
-var connectionStringTemplate = builder.Configuration.GetConnectionString("DefaultConnection");
-
-if (string.IsNullOrWhiteSpace(connectionStringTemplate))
-{
-    Console.WriteLine("[HATA] ConnectionStrings:DefaultConnection bulunamadı!");
-    throw new InvalidOperationException("ConnectionStrings:DefaultConnection eksik!");
-}
-
-// 🔹 **Bağlantı dizesine şifreyi ekle**
 string finalConnectionString = connectionStringTemplate.Replace("ENC(YOUR_ENCRYPTED_PASSWORD_HERE)", decryptedPassword);
 
-Console.WriteLine($"[DEBUG] Güncellenmiş ConnectionString: {finalConnectionString}");
-
-// 🔹 **DbContext'e bağlantıyı tanımla**
+// 🔹 **3. DbContext Konfigurasyonu**
 builder.Services.AddDbContext<BenimSalonumContext>(options =>
     options.UseSqlServer(finalConnectionString));
 
-var app = builder.Build();
+// 🔹 **Bağlantıyı Test Et**
+try
+{
+    using var connection = new SqlConnection(finalConnectionString);
+    connection.Open();
+    Console.WriteLine("✅ Veritabanı bağlantısı başarılı!");
+}
+catch (Exception ex)
+{
+    Console.WriteLine($"❌ Veritabanı bağlantısı başarısız: {ex.Message}");
+}
 
+// 🔹 **Uygulama Oluştur & Middleware'leri Ekle**
+var app = builder.Build();
+app.MigrateDatabase();
+
+// 🔹 **✅ TrialData'yı Çağırarak Test Verilerini Yükle**
+using (var scope = app.Services.CreateScope())
+{
+    var dbContext = scope.ServiceProvider.GetRequiredService<BenimSalonumContext>();
+    try
+    {
+        Console.ForegroundColor = ConsoleColor.Yellow;
+        Console.WriteLine("✅ TEST VERİLERİ YÜKLENİYOR..");
+        Console.ResetColor(); // Rengi sıfırlar
+            
+        await TrialData.SeedAsync(dbContext);
+        Console.ForegroundColor = ConsoleColor.Green;
+        Console.WriteLine("✅ TEST VERİLERİ YÜKLENDİ - BAŞARILI ");
+        Console.ResetColor(); // Rengi sıfırlar
+
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"❌ Test verileri yüklenirken hata oluştu: {ex.Message}");
+    }
+}
+
+// 🔹 **Swagger UI Kullanımı**
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -73,11 +98,11 @@ if (app.Environment.IsDevelopment())
     });
 }
 
-// **Yetkilendirme middleware ekleyelim**
+// 🔹 **Middleware'ler**
+app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
-
-app.UseHttpsRedirection();
 app.MapControllers();
 
+// 🔹 **API'yi Başlat**
 app.Run();

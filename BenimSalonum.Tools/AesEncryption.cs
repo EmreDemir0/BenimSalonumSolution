@@ -42,7 +42,7 @@ namespace BenimSalonum.Tools
                     encryptedText = encryptedText.Substring(4, encryptedText.Length - 5);
                 }
 
-                Console.WriteLine($"[DEBUG] Şifrelenmiş metin: {encryptedText}");
+                //Console.WriteLine($"[DEBUG] Şifrelenmiş metin: {encryptedText}");
 
                 // **Base64 formatında olup olmadığını kontrol et**
                 if (!IsBase64String(encryptedText))
@@ -64,7 +64,7 @@ namespace BenimSalonum.Tools
                             using (StreamReader srDecrypt = new StreamReader(csDecrypt))
                             {
                                 string decryptedText = srDecrypt.ReadToEnd();
-                                Console.WriteLine($"[DEBUG] Çözülen Şifre: {decryptedText}");
+                                //Console.WriteLine($"[DEBUG] Çözülen Şifre: {decryptedText}");
                                 return decryptedText;
                             }
                         }

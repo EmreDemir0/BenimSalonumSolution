@@ -1,6 +1,9 @@
 ﻿using System;
 using System.IO;
 using BenimSalonum.Tools;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.Data.SqlClient;
+using Microsoft.Extensions.Configuration;
 
 namespace SetDatabasePassword
 {
@@ -10,51 +13,30 @@ namespace SetDatabasePassword
         {
             string basePath = AppDomain.CurrentDomain.BaseDirectory;
 
-            string encryptedPassword = "HfetdUomva8MVAGpa/eFpH4C7wVjRDKR0WulT+jhdP8j1voJCmEPqoifFKwg1ofO";
-            static bool IsBase64String(string base64)
-            {
-                Span<byte> buffer = new Span<byte>(new byte[base64.Length]);
-                return Convert.TryFromBase64String(base64, buffer, out _);
-            }
-            if (IsBase64String(encryptedPassword))
-            {
-                Console.WriteLine("Şifre Base64 formatında geçerli.");
-            }
-            else
-            {
-                Console.WriteLine("[HATA] Şifre Base64 formatında değil!");
-            }
+            //Console.WriteLine($"Çalışma Dizini: {basePath}");
 
+           // Console.WriteLine("⚡ Kullanılan appsettings.json dosyası:");
 
-
-
-
-            Console.WriteLine($"Çalışma Dizini: {basePath}");
-
-            Console.WriteLine("⚡ Kullanılan appsettings.json dosyası:");
-            Console.WriteLine($"📂 {Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "appsettings.json")}");
+           // Console.WriteLine($"📂 {Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "appsettings.json")}");
 
 
             string configPath = Path.Combine(basePath, "appsettings.json");
+
             if (!File.Exists(configPath))
             {
                 Console.WriteLine("UYARI: appsettings.json bulunamadı! Lütfen dosyanın doğru dizinde olduğundan emin olun.");
+
                 Console.ReadLine(); // 🚀 Kapatmayı önlemek için
                 return;
             }
 
-            string configPath2 = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "appsettings.json");
-            Console.WriteLine($"🔍 Güncellenmesi gereken JSON dosyası: {configPath2}");
+            //string configPath2 = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "appsettings.json");
 
+            //Console.WriteLine($"🔍 Güncellenmesi gereken JSON dosyası: {configPath2}");
 
-            //Console.Write("📌 **Şifrelenmiş veriyi girin:** ");
-            //string encryptedPassword = Console.ReadLine();
-
-            //string decryptedPassword = AesEncryption.Decrypt(encryptedPassword);
-            //Console.WriteLine($"✅ Çözülen Şifre: {decryptedPassword}");
             try
             {
-                Console.Write("📌 **Veritabanı şifrenizi girin**: "); // ✅ Şifre istiyoruz
+                Console.Write("***DEĞİŞTİRİLECEK OLAN YADA GÜNCEL VERİ TABANI ŞİFRESİNİZİ GİRİN ***: "); // ✅ Şifre istiyoruz
                 string plainPassword = Console.ReadLine();
 
                 if (string.IsNullOrWhiteSpace(plainPassword))

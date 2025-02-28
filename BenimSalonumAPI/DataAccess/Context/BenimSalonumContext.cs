@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using BenimSalonum.Entities.Tables;
 using System.Reflection; // ✅ Entities içindeki tabloların olduğu namespace
+using BenimSalonum.Mappings;
 
 
 namespace BenimSalonumAPI.DataAccess.Context
@@ -29,8 +30,30 @@ namespace BenimSalonumAPI.DataAccess.Context
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+
             base.OnModelCreating(modelBuilder);
-            modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly()); // **Tüm Mapping dosyalarını yükle**
+            modelBuilder.ApplyConfigurationsFromAssembly(typeof(CariTableMap).Assembly);
+
+
+
+            modelBuilder.ApplyConfiguration(new CariTableMap());
+            modelBuilder.ApplyConfiguration(new DepoTableMap());
+            modelBuilder.ApplyConfiguration(new FisTableMap());
+            modelBuilder.ApplyConfiguration(new HizliSatisGrupTableMap());
+            modelBuilder.ApplyConfiguration(new HizliSatisUrunTableMap());
+            modelBuilder.ApplyConfiguration(new IndirimTableMap());
+            modelBuilder.ApplyConfiguration(new KasaHareketTableMap());
+            modelBuilder.ApplyConfiguration(new KasaTableMap());
+            modelBuilder.ApplyConfiguration(new KodTableMap());
+            modelBuilder.ApplyConfiguration(new KullaniciLogTableMap());
+            modelBuilder.ApplyConfiguration(new KullaniciRolTableMap());
+            modelBuilder.ApplyConfiguration(new KullaniciTableMap());
+            modelBuilder.ApplyConfiguration(new OdemeTuruTableMap());
+            modelBuilder.ApplyConfiguration(new PersonelHareketTableMap());
+            modelBuilder.ApplyConfiguration(new PersonelTableMap());
+            modelBuilder.ApplyConfiguration(new StokHareketTableMap());
+            modelBuilder.ApplyConfiguration(new StokTableMap());
+            modelBuilder.ApplyConfiguration(new TanimlarTableMap());
         }
     }
 }
