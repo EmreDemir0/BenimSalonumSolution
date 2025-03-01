@@ -7,7 +7,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
-namespace BenimSalonumAPI.DataAccess
+namespace BenimSalonumAPI
 {
     public class DataAccess<T> : IRepository<T> where T : class
     {
@@ -27,7 +27,8 @@ namespace BenimSalonumAPI.DataAccess
 
         public async Task<T> GetByIdAsync(object id)
         {
-            return await _dbSet.FindAsync(id);
+            var entity = await _dbSet.FindAsync(id) ?? throw new KeyNotFoundException($"Entity with id {id} not found.");
+            return entity;
         }
 
         public async Task AddAsync(T entity)
@@ -40,19 +41,22 @@ namespace BenimSalonumAPI.DataAccess
             await _dbSet.AddRangeAsync(entities);
         }
 
-        public async Task UpdateAsync(T entity) // ✅ Update metodunu ekledik
+        public async Task UpdateAsync(T entity)
         {
             _dbSet.Update(entity);
+            await _context.SaveChangesAsync(); // Burada zaten asenkron bir işlem yapılmaktadır.
         }
 
-        public async Task RemoveAsync(T entity) // ✅ Remove metodunu ekledik
+        public async Task RemoveAsync(T entity)
         {
             _dbSet.Remove(entity);
+            await _context.SaveChangesAsync(); // Burada da bir asenkron işlem yapılmaktadır.
         }
 
-        public async Task RemoveRangeAsync(IEnumerable<T> entities) // ✅ RemoveRange ekledik
+        public async Task RemoveRangeAsync(IEnumerable<T> entities)
         {
             _dbSet.RemoveRange(entities);
+            await _context.SaveChangesAsync(); // Burada da bir asenkron işlem yapılmaktadır.
         }
 
         public async Task<IEnumerable<T>> FindAsync(Expression<Func<T, bool>> predicate)
@@ -60,9 +64,14 @@ namespace BenimSalonumAPI.DataAccess
             return await _dbSet.Where(predicate).ToListAsync();
         }
 
-        public async Task<int> SaveChangesAsync() // ✅ SaveChangesAsync ekledik
+        // Bu metodu sadece veritabanı işlemleri dışarıda tetiklendiğinde çağırın
+        public async Task<int> SaveChangesAsync()
         {
             return await _context.SaveChangesAsync();
         }
     }
 }
+
+
+
+

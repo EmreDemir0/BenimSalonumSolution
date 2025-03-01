@@ -1,14 +1,15 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using BenimSalonum.Entities.Mapping;
 using BenimSalonum.Entities.Tables;
-using System.Reflection;
-using BenimSalonum.Entities.Mapping; // ✅ Entities içindeki tabloların olduğu namespace
-
+using Microsoft.EntityFrameworkCore;
 
 namespace BenimSalonumAPI.DataAccess.Context
 {
     public class BenimSalonumContext : DbContext
     {
+        // Primary Constructor kullanımı
         public BenimSalonumContext(DbContextOptions<BenimSalonumContext> options) : base(options) { }
+
+        // DbSet'ler
         public DbSet<CariTable> Cariler { get; set; }
         public DbSet<DepoTable> Depolar { get; set; }
         public DbSet<FisTable> Fisler { get; set; }
@@ -28,25 +29,11 @@ namespace BenimSalonumAPI.DataAccess.Context
         public DbSet<StokTable> Stoklar { get; set; }
         public DbSet<TanimlarTable> Tanimlar { get; set; }
 
+        // Model mapping
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-
             base.OnModelCreating(modelBuilder);
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(CariTableMap).Assembly);
-
-
-       //     modelBuilder.Entity<KasaHareketTable>()
-       //.HasOne(k => k.Kasa)  // Kasa ile ilişki
-       //.WithMany()  // Bir Kasa'nın birden fazla KasaHareket'i olabilir
-       //.HasForeignKey(k => k.KasaId)  // KasaId foreign key
-       //.OnDelete(DeleteBehavior.Restrict); // Silme davranışını kısıtla
-
-       // modelBuilder.Entity<KasaHareketTable>()
-       //         .HasOne(k => k.OdemeTuru)  // OdemeTuru ile ilişki
-       //         .WithMany()  // Bir ödeme türü çoklu KasaHareket'ine sahip olabilir
-       //         .HasForeignKey(k => k.OdemeTuruId)  // OdemeTuruId foreign key
-       //         .OnDelete(DeleteBehavior.Restrict); // Silme davranışını kısıtla
-
 
             modelBuilder.ApplyConfiguration(new CariTableMap());
             modelBuilder.ApplyConfiguration(new DepoTableMap());

@@ -4,8 +4,6 @@ using Microsoft.EntityFrameworkCore;
 
 public class KasaTableMap : IEntityTypeConfiguration<KasaTable>
 {
-    public void Configure(EntityTypeBuilder<KasaTable> builder)
-    {
  public void Configure(EntityTypeBuilder<KasaTable> builder)
     {
         builder.HasKey(e => e.Id);
@@ -29,4 +27,5 @@ public class KasaTableMap : IEntityTypeConfiguration<KasaTable>
 
 
     }
+
 }

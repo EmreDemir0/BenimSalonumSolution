@@ -11,19 +11,29 @@ using System;
 using BenimSalonum.Entities.Interfaces;
 using BenimSalonum.Entities.Tables;
 using BenimSalonumAPI.DataAccess;
+using BenimSalonumAPI;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// 🔹 **Swagger Servislerini ve API Tanımlamalarını Ekleyelim**
+// 🔹 **CORS Yapılandırmasını Ekleyelim**
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll", policy =>
+    {
+        policy.AllowAnyOrigin() // Herhangi bir kaynaktan gelen talepleri kabul eder
+              .AllowAnyMethod() // Herhangi bir HTTP methoduna izin verir (GET, POST vb.)
+              .AllowAnyHeader(); // Herhangi bir başlığa izin verir
+    });
+});
+
+// 🔹 **Swagger Servislerini Ekleyelim**
 builder.Services.AddControllers();
+builder.Services.AddScoped(typeof(IRepository<>), typeof(DataAccess<>));
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "BenimSalonum API", Version = "v1" });
 });
-
-// 📌 Repository'yi Dependency Injection'a Ekle
-builder.Services.AddScoped(typeof(IRepository<>), typeof(DataAccess<>));
 
 // 🔹 **Yetkilendirme & Kimlik Doğrulama**
 builder.Services.AddAuthorization();
@@ -35,20 +45,20 @@ builder.WebHost.ConfigureKestrel((context, options) =>
     options.Configure(context.Configuration.GetSection("Kestrel"));
 });
 
-// 🔹 **Şifreyi Oku & Çöz**
+// 🔹 **1. Şifreyi Oku & Çöz**
 var encryptedPassword = builder.Configuration["DatabaseSettings:Password"]
-    ?? throw new InvalidOperationException("Şifre bulunamadı! Lütfen `SetDatabasePassword` ile şifre belirleyin.");
+    ?? throw new InvalidOperationException("Şifre bulunamadı! Lütfen SetDatabasePassword ile şifre belirleyin.");
 
 var decryptedPassword = AesEncryption.Decrypt(encryptedPassword)
-    ?? throw new InvalidOperationException("Şifre çözülemedi! Lütfen `SetDatabasePassword` ile şifreyi tekrar belirleyin.");
+    ?? throw new InvalidOperationException("Şifre çözülemedi! Lütfen SetDatabasePassword ile şifreyi tekrar belirleyin.");
 
-// 🔹 **Connection String'i Oku & Güncelle**
+// 🔹 **2. Connection String'i Oku & Güncelle**
 var connectionStringTemplate = builder.Configuration.GetConnectionString("DefaultConnection")
     ?? throw new InvalidOperationException("ConnectionStrings:DefaultConnection eksik!");
 
 string finalConnectionString = connectionStringTemplate.Replace("ENC(YOUR_ENCRYPTED_PASSWORD_HERE)", decryptedPassword);
 
-// 🔹 **DbContext Konfigurasyonu**
+// 🔹 **3. DbContext Konfigurasyonu**
 builder.Services.AddDbContext<BenimSalonumContext>(options =>
     options.UseSqlServer(finalConnectionString));
 
@@ -69,26 +79,22 @@ var app = builder.Build();
 app.MigrateDatabase();
 
 // 🔹 **✅ TrialData'yı Çağırarak Test Verilerini Yükle**
-if (app.Environment.IsDevelopment())
+using (var scope = app.Services.CreateScope())
 {
-    using (var scope = app.Services.CreateScope())
+    var dbContext = scope.ServiceProvider.GetRequiredService<BenimSalonumContext>();
+    try
     {
-        var dbContext = scope.ServiceProvider.GetRequiredService<BenimSalonumContext>();
-        try
-        {
-            Console.ForegroundColor = ConsoleColor.Yellow;
-            Console.WriteLine("✅ TEST VERİLERİ YÜKLENİYOR..");
-            Console.ResetColor();
-
-            await TrialData.SeedAsync(dbContext);
-            Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine("✅ TEST VERİLERİ YÜKLENDİ - BAŞARILI ");
-            Console.ResetColor();
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"❌ Test verileri yüklenirken hata oluştu: {ex.Message}");
-        }
+        Console.ForegroundColor = ConsoleColor.Yellow;
+        Console.WriteLine("✅ TEST VERİLERİ YÜKLENİYOR..");
+        Console.ResetColor(); // Rengi sıfırlar
+        await TrialData.SeedAsync(dbContext);
+        Console.ForegroundColor = ConsoleColor.Green;
+        Console.WriteLine("✅ TEST VERİLERİ YÜKLEDİ - BAŞARILI ");
+        Console.ResetColor(); // Rengi sıfırlar
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"❌ Test verileri yüklenirken hata oluştu: {ex.Message}");
     }
 }
 
@@ -104,9 +110,13 @@ if (app.Environment.IsDevelopment())
 
 // 🔹 **Middleware'ler**
 app.UseHttpsRedirection();
-app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
+
+// 🔹 **CORS'u aktif et**
+app.UseCors("AllowAll");
+
+// **Controller'ları map'le**
 app.MapControllers();
 
 // 🔹 **API'yi Başlat**

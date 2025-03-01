@@ -12,9 +12,9 @@ namespace BenimSalonum.Entities.Interfaces
         Task AddAsync(T entity);
         Task AddRangeAsync(IEnumerable<T> entities);
         Task UpdateAsync(T entity);
-        Task RemoveAsync(T entity); // ✅ Eksikse ekleyin
-        Task RemoveRangeAsync(IEnumerable<T> entities); // ✅ Eksikse ekleyin
-        Task<IEnumerable<T>> FindAsync(Expression<Func<T, bool>> predicate); // ✅ Eksikse ekleyin
+        Task RemoveAsync(T entity);
+        Task RemoveRangeAsync(IEnumerable<T> entities);
+        Task<IEnumerable<T>> FindAsync(Expression<Func<T, bool>> predicate);
         Task<int> SaveChangesAsync();
     }
 }
