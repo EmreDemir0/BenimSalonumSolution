@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using BenimSalonum.Entities.Tables;
-using System.Reflection; // ✅ Entities içindeki tabloların olduğu namespace
-using BenimSalonum.Mappings;
+using System.Reflection;
+using BenimSalonum.Entities.Mapping; // ✅ Entities içindeki tabloların olduğu namespace
 
 
 namespace BenimSalonumAPI.DataAccess.Context
@@ -34,6 +34,18 @@ namespace BenimSalonumAPI.DataAccess.Context
             base.OnModelCreating(modelBuilder);
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(CariTableMap).Assembly);
 
+
+       //     modelBuilder.Entity<KasaHareketTable>()
+       //.HasOne(k => k.Kasa)  // Kasa ile ilişki
+       //.WithMany()  // Bir Kasa'nın birden fazla KasaHareket'i olabilir
+       //.HasForeignKey(k => k.KasaId)  // KasaId foreign key
+       //.OnDelete(DeleteBehavior.Restrict); // Silme davranışını kısıtla
+
+       // modelBuilder.Entity<KasaHareketTable>()
+       //         .HasOne(k => k.OdemeTuru)  // OdemeTuru ile ilişki
+       //         .WithMany()  // Bir ödeme türü çoklu KasaHareket'ine sahip olabilir
+       //         .HasForeignKey(k => k.OdemeTuruId)  // OdemeTuruId foreign key
+       //         .OnDelete(DeleteBehavior.Restrict); // Silme davranışını kısıtla
 
 
             modelBuilder.ApplyConfiguration(new CariTableMap());

@@ -8,6 +8,11 @@ namespace BenimSalonum.Tools
     {
         public static void EncryptAndUpdateAppSettings(string plainPassword)
         {
+            if (string.IsNullOrEmpty(plainPassword))
+            {
+                throw new ArgumentException("Şifre boş olamaz.", nameof(plainPassword));
+            }
+
             try
             {
                 // ✅ Güncellenecek JSON dosyalarını belirle
@@ -42,7 +47,16 @@ namespace BenimSalonum.Tools
                 JObject jsonObj = JObject.Parse(json);
 
                 // 📌 Şifreyi şifrele
-                string encryptedPassword = AesEncryption.Encrypt(plainPassword);
+                string? encryptedPassword = AesEncryption.Encrypt(plainPassword);
+
+                // Null kontrolü ekleyerek şifrenin boş olup olmadığını kontrol edelim
+                if (encryptedPassword == null)
+                {
+                    throw new InvalidOperationException("Şifreleme işlemi başarısız oldu, şifre null döndü.");
+                }
+
+                Console.WriteLine($"🔒 Şifrelenmiş Şifre: {encryptedPassword}");
+
                 Console.WriteLine($"🔒 Şifrelenmiş Şifre: {encryptedPassword}");
 
                 // 📌 JSON içeriğini güncelle

@@ -17,7 +17,7 @@ namespace BenimSalonumAPI.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Durumu = table.Column<bool>(type: "bit", nullable: false),
+                    Durumu = table.Column<bool>(type: "bit", nullable: false, defaultValue: true),
                     CariTuru = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     CariKodu = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
                     CariAdi = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
@@ -43,7 +43,7 @@ namespace BenimSalonumAPI.Migrations
                     IskontoOrani = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
                     RiskLimiti = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
                     Aciklama = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true),
-                    KayitTarihi = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    KayitTarihi = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETDATE()")
                 },
                 constraints: table =>
                 {
@@ -124,7 +124,7 @@ namespace BenimSalonumAPI.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Durumu = table.Column<bool>(type: "bit", nullable: false),
+                    Durumu = table.Column<bool>(type: "bit", nullable: false, defaultValue: true),
                     StokKodu = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
                     Barkod = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
                     StokAdi = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
@@ -177,8 +177,8 @@ namespace BenimSalonumAPI.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Aktif = table.Column<bool>(type: "bit", nullable: false),
-                    Durumu = table.Column<bool>(type: "bit", nullable: false),
+                    Aktif = table.Column<bool>(type: "bit", nullable: false, defaultValue: true),
+                    Durumu = table.Column<bool>(type: "bit", nullable: false, defaultValue: true),
                     KullaniciAdi = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     Adi = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     Soyadi = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
@@ -186,7 +186,7 @@ namespace BenimSalonumAPI.Migrations
                     Parola = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     HatirlatmaSorusu = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
                     HatirlatmaCevap = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
-                    KayitTarihi = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    KayitTarihi = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETDATE()"),
                     SonGirisTarihi = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
@@ -203,7 +203,7 @@ namespace BenimSalonumAPI.Migrations
                     KullaniciAdi = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     SonGirisTarihi = table.Column<DateTime>(type: "datetime2", nullable: true),
                     YapilanIslem = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
-                    YapilanIslemTarihi = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    YapilanIslemTarihi = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETDATE()")
                 },
                 constraints: table =>
                 {
@@ -221,7 +221,7 @@ namespace BenimSalonumAPI.Migrations
                     KullaniciAdi = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     FormAdi = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     KontrolAdi = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    Yetki = table.Column<bool>(type: "bit", nullable: false)
+                    Yetki = table.Column<bool>(type: "bit", nullable: false, defaultValue: false)
                 },
                 constraints: table =>
                 {
@@ -271,14 +271,14 @@ namespace BenimSalonumAPI.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Durumu = table.Column<bool>(type: "bit", nullable: false),
+                    Durumu = table.Column<bool>(type: "bit", nullable: false, defaultValue: true),
                     PersonelUnvani = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     PersonelKodu = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
                     PersonelAdi = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     PersonelTc = table.Column<string>(type: "nvarchar(11)", maxLength: 11, nullable: false),
-                    PersonelGiris = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    PersonelGiris = table.Column<DateTime>(type: "datetime2", nullable: true, defaultValueSql: "GETDATE()"),
                     PersonelCikis = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    CepTelefonu = table.Column<string>(type: "nvarchar(15)", maxLength: 15, nullable: false),
+                    CepTelefonu = table.Column<string>(type: "nvarchar(15)", maxLength: 15, nullable: false, defaultValue: "0000000000"),
                     Telefon = table.Column<string>(type: "nvarchar(15)", maxLength: 15, nullable: true),
                     Fax = table.Column<string>(type: "nvarchar(15)", maxLength: 15, nullable: true),
                     EMail = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
@@ -302,7 +302,7 @@ namespace BenimSalonumAPI.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Durumu = table.Column<bool>(type: "bit", nullable: false),
+                    Durumu = table.Column<bool>(type: "bit", nullable: false, defaultValue: true),
                     StokKodu = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
                     StokAdi = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     Barkod = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
@@ -358,17 +358,17 @@ namespace BenimSalonumAPI.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Barkod = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
                     UrunAdi = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    GrupId = table.Column<int>(type: "int", nullable: false),
-                    HizliSatisGrupId = table.Column<int>(type: "int", nullable: true)
+                    GrupId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_HizliSatisUrunleri", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_HizliSatisUrunleri_HizliSatisGruplari_HizliSatisGrupId",
-                        column: x => x.HizliSatisGrupId,
+                        name: "FK_HizliSatisUrunleri_HizliSatisGruplari_GrupId",
+                        column: x => x.GrupId,
                         principalTable: "HizliSatisGruplari",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -383,23 +383,17 @@ namespace BenimSalonumAPI.Migrations
                     OdemeTuruId = table.Column<int>(type: "int", nullable: false),
                     CariId = table.Column<int>(type: "int", nullable: true),
                     Tarih = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Tutar = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
+                    Tutar = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    OdemeTuruTableId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_KasaHareketleri", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_KasaHareketleri_Kasalar_KasaId",
-                        column: x => x.KasaId,
-                        principalTable: "Kasalar",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_KasaHareketleri_OdemeTurleri_OdemeTuruId",
-                        column: x => x.OdemeTuruId,
+                        name: "FK_KasaHareketleri_OdemeTurleri_OdemeTuruTableId",
+                        column: x => x.OdemeTuruTableId,
                         principalTable: "OdemeTurleri",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -417,9 +411,9 @@ namespace BenimSalonumAPI.Migrations
                     IndirimOrani = table.Column<decimal>(type: "decimal(5,2)", nullable: true),
                     DepoId = table.Column<int>(type: "int", nullable: false),
                     SeriNo = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
-                    Tarih = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    Tarih = table.Column<DateTime>(type: "datetime2", nullable: true, defaultValueSql: "GETDATE()"),
                     Aciklama = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true),
-                    Siparis = table.Column<bool>(type: "bit", nullable: false)
+                    Siparis = table.Column<bool>(type: "bit", nullable: false, defaultValue: false)
                 },
                 constraints: table =>
                 {
@@ -429,29 +423,24 @@ namespace BenimSalonumAPI.Migrations
                         column: x => x.DepoId,
                         principalTable: "Depolar",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_StokHareketleri_Stoklar_StokId",
                         column: x => x.StokId,
                         principalTable: "Stoklar",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_HizliSatisUrunleri_HizliSatisGrupId",
+                name: "IX_HizliSatisUrunleri_GrupId",
                 table: "HizliSatisUrunleri",
-                column: "HizliSatisGrupId");
+                column: "GrupId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_KasaHareketleri_KasaId",
+                name: "IX_KasaHareketleri_OdemeTuruTableId",
                 table: "KasaHareketleri",
-                column: "KasaId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_KasaHareketleri_OdemeTuruId",
-                table: "KasaHareketleri",
-                column: "OdemeTuruId");
+                column: "OdemeTuruTableId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_StokHareketleri_DepoId",
@@ -483,6 +472,9 @@ namespace BenimSalonumAPI.Migrations
                 name: "KasaHareketleri");
 
             migrationBuilder.DropTable(
+                name: "Kasalar");
+
+            migrationBuilder.DropTable(
                 name: "Kodlar");
 
             migrationBuilder.DropTable(
@@ -508,9 +500,6 @@ namespace BenimSalonumAPI.Migrations
 
             migrationBuilder.DropTable(
                 name: "HizliSatisGruplari");
-
-            migrationBuilder.DropTable(
-                name: "Kasalar");
 
             migrationBuilder.DropTable(
                 name: "OdemeTurleri");

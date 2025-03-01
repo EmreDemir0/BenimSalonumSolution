@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -7,7 +6,7 @@ namespace BenimSalonum.Entities.Tables
 {
     public class KasaTable
     {
-        [Key] // Primary Key
+        [Key]
         public int Id { get; set; }
 
         [Required, MaxLength(30)]
@@ -17,15 +16,12 @@ namespace BenimSalonum.Entities.Tables
         public required string KasaAdi { get; set; }
 
         [MaxLength(50)]
-        public string? YetkiliKodu { get; set; } // Opsiyonel alan (nullable)
+        public string? YetkiliKodu { get; set; }
 
         [MaxLength(100)]
-        public string? YetkiliAdi { get; set; } // Opsiyonel alan (nullable)
+        public string? YetkiliAdi { get; set; }
 
         [MaxLength(500)]
-        public string? Aciklama { get; set; } // Opsiyonel alan (nullable)
-
-        // Navigation Property: Kasa ile ilgili hareketler
-        public ICollection<KasaHareketTable>? KasaHareketleri { get; set; }
+        public string? Aciklama { get; set; }
     }
 }

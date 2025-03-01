@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BenimSalonumAPI.Migrations
 {
     [DbContext(typeof(BenimSalonumContext))]
-    [Migration("20250228093917_InitialCreate")]
+    [Migration("20250301072020_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -70,7 +70,9 @@ namespace BenimSalonumAPI.Migrations
                         .HasColumnType("nvarchar(15)");
 
                     b.Property<bool>("Durumu")
-                        .HasColumnType("bit");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(true);
 
                     b.Property<string>("EMail")
                         .HasMaxLength(100)
@@ -98,7 +100,9 @@ namespace BenimSalonumAPI.Migrations
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<DateTime>("KayitTarihi")
-                        .HasColumnType("datetime2");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETDATE()");
 
                     b.Property<string>("OzelKod1")
                         .HasMaxLength(30)
@@ -145,7 +149,7 @@ namespace BenimSalonumAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Cariler", (string)null);
+                    b.ToTable("Cariler");
                 });
 
             modelBuilder.Entity("BenimSalonum.Entities.Tables.DepoTable", b =>
@@ -328,9 +332,6 @@ namespace BenimSalonumAPI.Migrations
                     b.Property<int>("GrupId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("HizliSatisGrupId")
-                        .HasColumnType("int");
-
                     b.Property<string>("UrunAdi")
                         .IsRequired()
                         .HasMaxLength(100)
@@ -338,7 +339,7 @@ namespace BenimSalonumAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("HizliSatisGrupId");
+                    b.HasIndex("GrupId");
 
                     b.ToTable("HizliSatisUrunleri");
                 });
@@ -366,7 +367,9 @@ namespace BenimSalonumAPI.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<bool>("Durumu")
-                        .HasColumnType("bit");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(true);
 
                     b.Property<decimal>("IndirimOrani")
                         .HasColumnType("decimal(5,2)");
@@ -389,48 +392,6 @@ namespace BenimSalonumAPI.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Indirimler");
-                });
-
-            modelBuilder.Entity("BenimSalonum.Entities.Tables.KasaHareketTable", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int?>("CariId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("FisKodu")
-                        .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
-
-                    b.Property<string>("Hareket")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<int>("KasaId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("OdemeTuruId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("Tarih")
-                        .HasColumnType("datetime2");
-
-                    b.Property<decimal>("Tutar")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("KasaId");
-
-                    b.HasIndex("OdemeTuruId");
-
-                    b.ToTable("KasaHareketleri");
                 });
 
             modelBuilder.Entity("BenimSalonum.Entities.Tables.KasaTable", b =>
@@ -516,7 +477,9 @@ namespace BenimSalonumAPI.Migrations
                         .HasColumnType("nvarchar(200)");
 
                     b.Property<DateTime>("YapilanIslemTarihi")
-                        .HasColumnType("datetime2");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETDATE()");
 
                     b.HasKey("Id");
 
@@ -553,7 +516,9 @@ namespace BenimSalonumAPI.Migrations
                         .HasColumnType("int");
 
                     b.Property<bool>("Yetki")
-                        .HasColumnType("bit");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
 
                     b.HasKey("Id");
 
@@ -574,10 +539,14 @@ namespace BenimSalonumAPI.Migrations
                         .HasColumnType("nvarchar(50)");
 
                     b.Property<bool>("Aktif")
-                        .HasColumnType("bit");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(true);
 
                     b.Property<bool>("Durumu")
-                        .HasColumnType("bit");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(true);
 
                     b.Property<string>("Gorevi")
                         .HasMaxLength(50)
@@ -592,7 +561,9 @@ namespace BenimSalonumAPI.Migrations
                         .HasColumnType("nvarchar(100)");
 
                     b.Property<DateTime>("KayitTarihi")
-                        .HasColumnType("datetime2");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETDATE()");
 
                     b.Property<string>("KullaniciAdi")
                         .IsRequired()
@@ -719,11 +690,15 @@ namespace BenimSalonumAPI.Migrations
 
                     b.Property<string>("CepTelefonu")
                         .IsRequired()
+                        .ValueGeneratedOnAdd()
                         .HasMaxLength(15)
-                        .HasColumnType("nvarchar(15)");
+                        .HasColumnType("nvarchar(15)")
+                        .HasDefaultValue("0000000000");
 
                     b.Property<bool>("Durumu")
-                        .HasColumnType("bit");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(true);
 
                     b.Property<string>("EMail")
                         .HasMaxLength(100)
@@ -750,7 +725,9 @@ namespace BenimSalonumAPI.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<DateTime?>("PersonelGiris")
-                        .HasColumnType("datetime2");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETDATE()");
 
                     b.Property<string>("PersonelKodu")
                         .IsRequired()
@@ -829,13 +806,17 @@ namespace BenimSalonumAPI.Migrations
                         .HasColumnType("nvarchar(50)");
 
                     b.Property<bool>("Siparis")
-                        .HasColumnType("bit");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
 
                     b.Property<int>("StokId")
                         .HasColumnType("int");
 
                     b.Property<DateTime?>("Tarih")
-                        .HasColumnType("datetime2");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETDATE()");
 
                     b.HasKey("Id");
 
@@ -884,7 +865,9 @@ namespace BenimSalonumAPI.Migrations
                         .HasColumnType("nvarchar(20)");
 
                     b.Property<bool>("Durumu")
-                        .HasColumnType("bit");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(true);
 
                     b.Property<string>("GarantiSuresi")
                         .HasMaxLength(20)
@@ -986,32 +969,58 @@ namespace BenimSalonumAPI.Migrations
                     b.ToTable("Tanimlar");
                 });
 
+            modelBuilder.Entity("KasaHareketTable", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int?>("CariId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("FisKodu")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<string>("Hareket")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<int>("KasaId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("OdemeTuruId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("OdemeTuruTableId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("Tarih")
+                        .HasColumnType("datetime2");
+
+                    b.Property<decimal>("Tutar")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OdemeTuruTableId");
+
+                    b.ToTable("KasaHareketleri");
+                });
+
             modelBuilder.Entity("BenimSalonum.Entities.Tables.HizliSatisUrunTable", b =>
                 {
                     b.HasOne("BenimSalonum.Entities.Tables.HizliSatisGrupTable", "HizliSatisGrup")
                         .WithMany()
-                        .HasForeignKey("HizliSatisGrupId");
+                        .HasForeignKey("GrupId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.Navigation("HizliSatisGrup");
-                });
-
-            modelBuilder.Entity("BenimSalonum.Entities.Tables.KasaHareketTable", b =>
-                {
-                    b.HasOne("BenimSalonum.Entities.Tables.KasaTable", "Kasa")
-                        .WithMany("KasaHareketleri")
-                        .HasForeignKey("KasaId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("BenimSalonum.Entities.Tables.OdemeTuruTable", "OdemeTuru")
-                        .WithMany("KasaHareketleri")
-                        .HasForeignKey("OdemeTuruId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Kasa");
-
-                    b.Navigation("OdemeTuru");
                 });
 
             modelBuilder.Entity("BenimSalonum.Entities.Tables.StokHareketTable", b =>
@@ -1019,13 +1028,13 @@ namespace BenimSalonumAPI.Migrations
                     b.HasOne("BenimSalonum.Entities.Tables.DepoTable", "Depo")
                         .WithMany()
                         .HasForeignKey("DepoId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("BenimSalonum.Entities.Tables.StokTable", "Stok")
                         .WithMany()
                         .HasForeignKey("StokId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Depo");
@@ -1033,9 +1042,11 @@ namespace BenimSalonumAPI.Migrations
                     b.Navigation("Stok");
                 });
 
-            modelBuilder.Entity("BenimSalonum.Entities.Tables.KasaTable", b =>
+            modelBuilder.Entity("KasaHareketTable", b =>
                 {
-                    b.Navigation("KasaHareketleri");
+                    b.HasOne("BenimSalonum.Entities.Tables.OdemeTuruTable", null)
+                        .WithMany("KasaHareketleri")
+                        .HasForeignKey("OdemeTuruTableId");
                 });
 
             modelBuilder.Entity("BenimSalonum.Entities.Tables.OdemeTuruTable", b =>

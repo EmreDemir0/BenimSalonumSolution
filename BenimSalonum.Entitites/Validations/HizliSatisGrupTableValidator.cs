@@ -1,15 +1,16 @@
 using FluentValidation;
 using BenimSalonum.Entities.Tables;
 
-namespace BenimSalonum.Validations
+namespace BenimSalonum.Entities.Validations
 {
     public class HizliSatisGrupTableValidator : AbstractValidator<HizliSatisGrupTable>
     {
         public HizliSatisGrupTableValidator()
         {
-            // Örnek doğrulama kuralları
-            RuleFor(x => x.Id).GreaterThan(0);
-            RuleFor(x => x.GrupAdi).NotEmpty().MaximumLength(100);
+            // **GrupAdi** zorunlu ve 100 karakteri geçemez
+            RuleFor(x => x.GrupAdi)
+                .NotEmpty().WithMessage("Grup Adı gereklidir.")
+                .MaximumLength(100).WithMessage("Grup Adı en fazla 100 karakter olabilir.");
         }
     }
 }

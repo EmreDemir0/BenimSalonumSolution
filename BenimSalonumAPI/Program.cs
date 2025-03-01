@@ -35,20 +35,20 @@ builder.WebHost.ConfigureKestrel((context, options) =>
     options.Configure(context.Configuration.GetSection("Kestrel"));
 });
 
-// 🔹 **1️⃣ Şifreyi Oku & Çöz**
+// 🔹 **Şifreyi Oku & Çöz**
 var encryptedPassword = builder.Configuration["DatabaseSettings:Password"]
     ?? throw new InvalidOperationException("Şifre bulunamadı! Lütfen `SetDatabasePassword` ile şifre belirleyin.");
 
 var decryptedPassword = AesEncryption.Decrypt(encryptedPassword)
     ?? throw new InvalidOperationException("Şifre çözülemedi! Lütfen `SetDatabasePassword` ile şifreyi tekrar belirleyin.");
 
-// 🔹 **2️⃣ Connection String'i Oku & Güncelle**
+// 🔹 **Connection String'i Oku & Güncelle**
 var connectionStringTemplate = builder.Configuration.GetConnectionString("DefaultConnection")
     ?? throw new InvalidOperationException("ConnectionStrings:DefaultConnection eksik!");
 
 string finalConnectionString = connectionStringTemplate.Replace("ENC(YOUR_ENCRYPTED_PASSWORD_HERE)", decryptedPassword);
 
-// 🔹 **3️⃣ DbContext Konfigurasyonu**
+// 🔹 **DbContext Konfigurasyonu**
 builder.Services.AddDbContext<BenimSalonumContext>(options =>
     options.UseSqlServer(finalConnectionString));
 
@@ -69,24 +69,26 @@ var app = builder.Build();
 app.MigrateDatabase();
 
 // 🔹 **✅ TrialData'yı Çağırarak Test Verilerini Yükle**
-using (var scope = app.Services.CreateScope())
+if (app.Environment.IsDevelopment())
 {
-    var dbContext = scope.ServiceProvider.GetRequiredService<BenimSalonumContext>();
-    try
+    using (var scope = app.Services.CreateScope())
     {
-        Console.ForegroundColor = ConsoleColor.Yellow;
-        Console.WriteLine("✅ TEST VERİLERİ YÜKLENİYOR..");
-        Console.ResetColor();
+        var dbContext = scope.ServiceProvider.GetRequiredService<BenimSalonumContext>();
+        try
+        {
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.WriteLine("✅ TEST VERİLERİ YÜKLENİYOR..");
+            Console.ResetColor();
 
-        await TrialData.SeedAsync(dbContext);
-        Console.ForegroundColor = ConsoleColor.Green;
-        Console.WriteLine("✅ TEST VERİLERİ YÜKLENDİ - BAŞARILI ");
-        Console.ResetColor();
-
-    }
-    catch (Exception ex)
-    {
-        Console.WriteLine($"❌ Test verileri yüklenirken hata oluştu: {ex.Message}");
+            await TrialData.SeedAsync(dbContext);
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine("✅ TEST VERİLERİ YÜKLENDİ - BAŞARILI ");
+            Console.ResetColor();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"❌ Test verileri yüklenirken hata oluştu: {ex.Message}");
+        }
     }
 }
 
@@ -102,6 +104,7 @@ if (app.Environment.IsDevelopment())
 
 // 🔹 **Middleware'ler**
 app.UseHttpsRedirection();
+app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
