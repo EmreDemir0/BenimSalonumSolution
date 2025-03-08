@@ -372,6 +372,30 @@ namespace BenimSalonumAPI.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "UserJwtTokens",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserId = table.Column<int>(type: "int", nullable: false),
+                    Username = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    Password = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    Role = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    Token = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false),
+                    Expiration = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserJwtTokens", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_UserJwtTokens_Kullanicilar_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Kullanicilar",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "KasaHareketleri",
                 columns: table => new
                 {
@@ -451,6 +475,11 @@ namespace BenimSalonumAPI.Migrations
                 name: "IX_StokHareketleri_StokId",
                 table: "StokHareketleri",
                 column: "StokId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserJwtTokens_UserId",
+                table: "UserJwtTokens",
+                column: "UserId");
         }
 
         /// <inheritdoc />
@@ -478,9 +507,6 @@ namespace BenimSalonumAPI.Migrations
                 name: "Kodlar");
 
             migrationBuilder.DropTable(
-                name: "Kullanicilar");
-
-            migrationBuilder.DropTable(
                 name: "KullaniciLoglari");
 
             migrationBuilder.DropTable(
@@ -499,6 +525,9 @@ namespace BenimSalonumAPI.Migrations
                 name: "Tanimlar");
 
             migrationBuilder.DropTable(
+                name: "UserJwtTokens");
+
+            migrationBuilder.DropTable(
                 name: "HizliSatisGruplari");
 
             migrationBuilder.DropTable(
@@ -509,6 +538,9 @@ namespace BenimSalonumAPI.Migrations
 
             migrationBuilder.DropTable(
                 name: "Stoklar");
+
+            migrationBuilder.DropTable(
+                name: "Kullanicilar");
         }
     }
 }

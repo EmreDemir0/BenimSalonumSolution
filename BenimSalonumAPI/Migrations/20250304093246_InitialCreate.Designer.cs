@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BenimSalonumAPI.Migrations
 {
     [DbContext(typeof(BenimSalonumContext))]
-    [Migration("20250301072020_InitialCreate")]
+    [Migration("20250304093246_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -1012,6 +1012,47 @@ namespace BenimSalonumAPI.Migrations
                     b.ToTable("KasaHareketleri");
                 });
 
+            modelBuilder.Entity("UserJwtToken", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("Expiration")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("Role")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("Token")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Username")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("UserJwtTokens", (string)null);
+                });
+
             modelBuilder.Entity("BenimSalonum.Entities.Tables.HizliSatisUrunTable", b =>
                 {
                     b.HasOne("BenimSalonum.Entities.Tables.HizliSatisGrupTable", "HizliSatisGrup")
@@ -1047,6 +1088,15 @@ namespace BenimSalonumAPI.Migrations
                     b.HasOne("BenimSalonum.Entities.Tables.OdemeTuruTable", null)
                         .WithMany("KasaHareketleri")
                         .HasForeignKey("OdemeTuruTableId");
+                });
+
+            modelBuilder.Entity("UserJwtToken", b =>
+                {
+                    b.HasOne("BenimSalonum.Entities.Tables.KullaniciTable", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("BenimSalonum.Entities.Tables.OdemeTuruTable", b =>

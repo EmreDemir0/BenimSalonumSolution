@@ -6,8 +6,10 @@ namespace BenimSalonumAPI.DataAccess.Context
 {
     public class BenimSalonumContext : DbContext
     {
-        // Primary Constructor kullanımı
         public BenimSalonumContext(DbContextOptions<BenimSalonumContext> options) : base(options) { }
+
+        // 🔹 **Yeni RefreshToken DbSet Eklendi**
+        public DbSet<RefreshToken> RefreshTokens { get; set; }
 
         // DbSet'ler
         public DbSet<CariTable> Cariler { get; set; }
@@ -28,8 +30,9 @@ namespace BenimSalonumAPI.DataAccess.Context
         public DbSet<StokHareketTable> StokHareketleri { get; set; }
         public DbSet<StokTable> Stoklar { get; set; }
         public DbSet<TanimlarTable> Tanimlar { get; set; }
+        public DbSet<UserJwtToken> UserJwtTokens { get; set; }
 
-        // Model mapping
+        // 🔹 **Model mapping**
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -53,6 +56,10 @@ namespace BenimSalonumAPI.DataAccess.Context
             modelBuilder.ApplyConfiguration(new StokHareketTableMap());
             modelBuilder.ApplyConfiguration(new StokTableMap());
             modelBuilder.ApplyConfiguration(new TanimlarTableMap());
+            modelBuilder.ApplyConfiguration(new UserJwtTokenMap());
+
+            // 🔹 **Yeni RefreshToken Mapping'i ekleyelim**
+            modelBuilder.ApplyConfiguration(new RefreshTokenMap());
         }
     }
 }

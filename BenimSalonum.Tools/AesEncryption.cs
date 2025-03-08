@@ -42,19 +42,15 @@ namespace BenimSalonum.Tools
                     encryptedText = encryptedText.Substring(4, encryptedText.Length - 5);
                 }
 
-                //Console.WriteLine($"[DEBUG] Şifrelenmiş metin: {encryptedText}");
-
-                // **Base64 formatında olup olmadığını kontrol et**
                 if (!IsBase64String(encryptedText))
                 {
-                    Console.WriteLine("[HATA] Base64 şifre çözme başarısız: Base64 formatı geçersiz!");
                     throw new FormatException("Base64 formatı geçersiz: Şifre yanlış kaydedilmiş olabilir.");
                 }
 
                 using (Aes aesAlg = Aes.Create())
                 {
                     aesAlg.Key = Encoding.UTF8.GetBytes(AESKey);
-                    aesAlg.IV = Encoding.UTF8.GetBytes("ThisIsAnIV123456");
+                    aesAlg.IV = IV;
 
                     ICryptoTransform decryptor = aesAlg.CreateDecryptor(aesAlg.Key, aesAlg.IV);
                     using (MemoryStream msDecrypt = new MemoryStream(Convert.FromBase64String(encryptedText)))
@@ -63,25 +59,18 @@ namespace BenimSalonum.Tools
                         {
                             using (StreamReader srDecrypt = new StreamReader(csDecrypt))
                             {
-                                string decryptedText = srDecrypt.ReadToEnd();
-                                //Console.WriteLine($"[DEBUG] Çözülen Şifre: {decryptedText}");
-                                return decryptedText;
+                                return srDecrypt.ReadToEnd();
                             }
                         }
                     }
                 }
             }
-            catch (FormatException ex)
-            {
-                Console.WriteLine($"[HATA] Base64 şifre çözme başarısız: {ex.Message}");
-                throw;
-            }
             catch (Exception ex)
             {
-                Console.WriteLine($"[HATA] Şifre çözme hatası: {ex.Message}");
-                throw;
+                throw new InvalidOperationException($"Şifre çözme hatası: {ex.Message}");
             }
         }
+
 
         // **Base64 doğrulama fonksiyonu**
         private static bool IsBase64String(string base64)

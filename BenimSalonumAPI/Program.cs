@@ -7,10 +7,15 @@ using BenimSalonumAPI.DataAccess.Context;
 using BenimSalonum.Tools;
 using BenimSalonum.API.Extensions;
 using BenimSalonum.DataAccess.SeedData;
+using BenimSalonumAPI.DataAccess.Services;
 using System;
 using BenimSalonum.Entities.Interfaces;
 using BenimSalonum.Entities.Tables;
 using BenimSalonumAPI.DataAccess;
+using BenimSalonumAPI.DataAccess.Repositories;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 using BenimSalonumAPI;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -20,15 +25,23 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAll", policy =>
     {
-        policy.AllowAnyOrigin() // Herhangi bir kaynaktan gelen talepleri kabul eder
-              .AllowAnyMethod() // Herhangi bir HTTP methoduna izin verir (GET, POST vb.)
-              .AllowAnyHeader(); // Herhangi bir başlığa izin verir
+        policy.AllowAnyOrigin()
+              .AllowAnyMethod()
+              .AllowAnyHeader();
     });
 });
 
 // 🔹 **Swagger Servislerini Ekleyelim**
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.PropertyNameCaseInsensitive = true;
+    });
+
 builder.Services.AddScoped(typeof(IRepository<>), typeof(DataAccess<>));
+builder.Services.AddScoped<JwtTokenService>();
+builder.Services.AddScoped<TokenService>(); // **Eksik olan TokenService eklendi**
+builder.Services.AddScoped<RefreshTokenRepository>(); // **Eksik olan RefreshTokenRepository eklendi**
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
@@ -36,8 +49,32 @@ builder.Services.AddSwaggerGen(c =>
 });
 
 // 🔹 **Yetkilendirme & Kimlik Doğrulama**
+var jwtKey = builder.Configuration["Jwt:Secret"];
+if (string.IsNullOrEmpty(jwtKey))
+{
+    throw new InvalidOperationException("JWT Secret key tanımlanmamış! Lütfen appsettings.json içine ekleyin.");
+}
+
+var key = Encoding.UTF8.GetBytes(jwtKey);
+
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.RequireHttpsMetadata = false;
+        options.SaveToken = true;
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = new SymmetricSecurityKey(key),
+            ValidateIssuer = false,
+            ValidateAudience = false,
+            RequireExpirationTime = true,
+            ValidateLifetime = true,
+            ClockSkew = TimeSpan.Zero
+        };
+    });
+
 builder.Services.AddAuthorization();
-builder.Services.AddAuthentication();
 
 // 🔹 **Kestrel Yapılandırması**
 builder.WebHost.ConfigureKestrel((context, options) =>
@@ -86,11 +123,11 @@ using (var scope = app.Services.CreateScope())
     {
         Console.ForegroundColor = ConsoleColor.Yellow;
         Console.WriteLine("✅ TEST VERİLERİ YÜKLENİYOR..");
-        Console.ResetColor(); // Rengi sıfırlar
+        Console.ResetColor();
         await TrialData.SeedAsync(dbContext);
         Console.ForegroundColor = ConsoleColor.Green;
         Console.WriteLine("✅ TEST VERİLERİ YÜKLEDİ - BAŞARILI ");
-        Console.ResetColor(); // Rengi sıfırlar
+        Console.ResetColor();
     }
     catch (Exception ex)
     {
@@ -109,15 +146,19 @@ if (app.Environment.IsDevelopment())
 }
 
 // 🔹 **Middleware'ler**
-app.UseHttpsRedirection();
-app.UseAuthentication();
+//app.UseHttpsRedirection();
+
 app.UseAuthorization();
+app.UseRouting();
+app.UseAuthentication();
+
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapControllers();
+});
 
 // 🔹 **CORS'u aktif et**
 app.UseCors("AllowAll");
-
-// **Controller'ları map'le**
-app.MapControllers();
 
 // 🔹 **API'yi Başlat**
 app.Run();
