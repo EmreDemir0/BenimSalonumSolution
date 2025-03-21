@@ -41,7 +41,8 @@ namespace BenimSalonumAPI.DataAccess.Services
                 Expires = DateTime.UtcNow.AddHours(2), // ✅ UTC kullanıyoruz
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256),
                 Issuer = _config["JwtSettings:Issuer"],   // ✅ Issuer ekledik
-                Audience = _config["JwtSettings:Audience"] // ✅ Audience ekledik
+                Audience = _config["JwtSettings:Audience"], // ✅ Audience ekledik
+
             };
 
             var tokenHandler = new JwtSecurityTokenHandler();
@@ -50,11 +51,10 @@ namespace BenimSalonumAPI.DataAccess.Services
         }
 
         // 📌 **Refresh Token Üret**
-        public RefreshToken GenerateRefreshToken(string userId)
+        public RefreshToken GenerateRefreshToken(string userId, string ipAddress, string userAgent, string deviceName, string platform)
         {
             var randomBytes = new byte[64];
 
-            // ✅ **RNGCryptoServiceProvider yerine daha güvenli `RandomNumberGenerator` kullandık**
             using (var rng = RandomNumberGenerator.Create())
             {
                 rng.GetBytes(randomBytes);
@@ -64,9 +64,16 @@ namespace BenimSalonumAPI.DataAccess.Services
             {
                 UserId = userId,
                 Token = Convert.ToBase64String(randomBytes),
-                Expires = DateTime.UtcNow.AddDays(7), // ✅ UTC olarak ayarlandı
-                IsRevoked = false
+                Expires = DateTime.UtcNow.AddDays(7),
+                IsRevoked = false,
+                CreatedAt = DateTime.UtcNow,
+                IpAddress = ipAddress,
+                UserAgent = userAgent,
+                DeviceName = deviceName,
+                Platform = platform
             };
         }
+
+
     }
 }

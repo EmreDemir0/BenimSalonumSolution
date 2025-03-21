@@ -28,6 +28,13 @@ namespace BenimSalonum.Entities.Mapping
 
             builder.Property(x => x.CreatedAt)
                 .IsRequired();
+
+            builder.Property(x => x.IpAddress).HasMaxLength(100);
+            builder.Property(x => x.UserAgent).HasMaxLength(300);
+            builder.Property(x => x.DeviceName).HasMaxLength(100);
+            builder.Property(x => x.Platform).HasMaxLength(50);
+
+
         }
     }
 }
