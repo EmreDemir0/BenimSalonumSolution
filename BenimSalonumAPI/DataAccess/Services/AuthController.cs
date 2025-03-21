@@ -49,12 +49,18 @@ namespace BenimSalonumAPI.Controllers
                 return Unauthorized("Geçersiz kullanıcı adı veya şifre.");
             }
 
-            // **Access Token oluştur ve kaydet**
+            // **Tüm önceki tokenları iptal et**
+            await _refreshTokenRepo.RevokeUserRefreshTokens(user.Id.ToString());
+            await _refreshTokenRepo.RevokeUserAccessTokens(user.Id);
+
+            // **Yeni Access Token oluştur**
             var accessToken = await _jwtTokenService.GenerateToken(user.Id);
 
-            // **Refresh Token oluştur ve kaydet**
+            // **Yeni Refresh Token oluştur**
             var refreshToken = _tokenService.GenerateRefreshToken(user.Id.ToString());
             await _refreshTokenRepo.SaveRefreshToken(refreshToken);
+
+            Console.WriteLine($"✅ Kullanıcı {user.KullaniciAdi} başarıyla giriş yaptı.");
 
             return Ok(new
             {
@@ -64,25 +70,37 @@ namespace BenimSalonumAPI.Controllers
             });
         }
 
+        public class RefreshTokenRequest
+        {
+            public string RefreshToken { get; set; }
+        }
 
         [HttpPost("refresh-token")]
-        public async Task<IActionResult> RefreshToken([FromBody] string refreshToken)
+        public async Task<IActionResult> RefreshToken([FromBody] RefreshTokenRequest request)
         {
-            var existingToken = await _refreshTokenRepo.GetRefreshToken(refreshToken);
-            if (existingToken == null || existingToken.IsRevoked || existingToken.Expires < DateTime.UtcNow)
+            if (string.IsNullOrEmpty(request.RefreshToken))
+            {
+                return BadRequest("Refresh Token boş olamaz.");
+            }
+
+            var existingToken = await _refreshTokenRepo.GetRefreshToken(request.RefreshToken);
+
+            if (existingToken == null || existingToken.IsRevoked || existingToken.Expires < DateTime.UtcNow) // ✅ UTC kullanıyoruz
             {
                 return Unauthorized("Geçersiz veya süresi dolmuş refresh token.");
             }
 
-            var newAccessToken = _tokenService.GenerateAccessToken(existingToken.UserId);
-            var newRefreshToken = _tokenService.GenerateRefreshToken(existingToken.UserId);
+            // **Eski tokenları iptal et**
+            await _refreshTokenRepo.RevokeUserRefreshTokens(existingToken.UserId);
 
-            await _refreshTokenRepo.RevokeRefreshToken(refreshToken);
+            // **Yeni Refresh Token oluştur ve kaydet**
+            var newRefreshToken = _tokenService.GenerateRefreshToken(existingToken.UserId);
             await _refreshTokenRepo.SaveRefreshToken(newRefreshToken);
+
+            Console.WriteLine($"✅ Yeni Refresh Token oluşturuldu: {newRefreshToken.Token}");
 
             return Ok(new
             {
-                accessToken = newAccessToken,
                 refreshToken = newRefreshToken.Token
             });
         }
@@ -92,16 +110,21 @@ namespace BenimSalonumAPI.Controllers
         public async Task<IActionResult> Logout()
         {
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            Console.WriteLine("📌 Kullanıcı ID'si: " + (userId ?? "NULL GELİYOR!"));
 
             if (string.IsNullOrEmpty(userId))
             {
-                return BadRequest("Kullanıcı kimliği bulunamadı.");
+                Console.WriteLine("❌ Kullanıcı ID bulunamadı! Token API'ye ulaşıyor mu?");
+                return Unauthorized("Kimlik doğrulama başarısız! Lütfen Access Token’ı kontrol et.");
             }
 
-            var tokens = await _context.RefreshTokens.Where(t => t.UserId == userId).ToListAsync();
-            _context.RefreshTokens.RemoveRange(tokens);
-            await _context.SaveChangesAsync();
+            Console.WriteLine($"✅ Kullanıcı {userId} başarıyla doğrulandı.");
 
+            // **Tüm tokenları iptal et**
+            await _refreshTokenRepo.RevokeUserRefreshTokens(userId);
+            await _refreshTokenRepo.RevokeUserAccessTokens(int.Parse(userId));
+
+            Console.WriteLine("✅ Logout işlemi tamamlandı, tüm tokenlar iptal edildi.");
             return Ok("Çıkış yapıldı, tüm tokenlar geçersiz hale getirildi.");
         }
 

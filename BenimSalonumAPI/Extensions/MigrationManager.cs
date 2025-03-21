@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
+using System.Linq;
 
 namespace BenimSalonum.API.Extensions
 {
@@ -17,13 +18,22 @@ namespace BenimSalonum.API.Extensions
 
                 try
                 {
-                    Console.WriteLine("Checking for database migrations...");
-                    dbContext.Database.Migrate(); // Migrasyonları uygula
-                    Console.WriteLine("Database migration applied successfully.");
+                    Console.WriteLine("📌 Veritabanı güncelleniyor...");
+
+                    // 📌 **Eğer tablo yoksa, migrasyonu uygula**
+                    if (!dbContext.Database.GetPendingMigrations().Any())
+                    {
+                        Console.WriteLine("✅ Mevcut migrasyonlar uygulanmış, tablo güncelleniyor...");
+                    }
+                    else
+                    {
+                        dbContext.Database.Migrate();
+                        Console.WriteLine("✅ Yeni migrasyonlar uygulandı.");
+                    }    
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine($"Database migration failed: {ex.Message}");
+                    Console.WriteLine($"❌ Veritabanı güncelleme hatası: {ex.Message}");
                 }
             }
             return host;

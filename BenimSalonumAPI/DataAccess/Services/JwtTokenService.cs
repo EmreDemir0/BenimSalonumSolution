@@ -8,7 +8,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using BenimSalonum.Entities.Tables;
 using BenimSalonumAPI.DataAccess.Context;
-using System.Security.Cryptography;
 
 namespace BenimSalonumAPI.DataAccess.Services
 {
@@ -23,32 +22,41 @@ namespace BenimSalonumAPI.DataAccess.Services
             _context = context;
         }
 
+        // ✅ **Access Token Oluşturma Metodu**
         public async Task<string> GenerateToken(int userId)
         {
             var dbUser = await _context.Kullanicilar
                 .Where(u => u.Id == userId)
-                .Select(u => new { u.KullaniciAdi, u.Gorevi })
+                .Select(u => new { u.KullaniciAdi, u.Gorevi, u.Id })
                 .FirstOrDefaultAsync();
 
             if (dbUser == null)
             {
-                throw new InvalidOperationException("Kullanıcı veritabanında bulunamadı!");
+                throw new InvalidOperationException("❌ Kullanıcı veritabanında bulunamadı!");
             }
 
             var claims = new[]
             {
-        new Claim(ClaimTypes.NameIdentifier, userId.ToString()),
-        new Claim(ClaimTypes.Name, dbUser.KullaniciAdi),
-        new Claim(ClaimTypes.Role, dbUser.Gorevi)
-    };
+                new Claim(ClaimTypes.NameIdentifier, dbUser.Id.ToString()),
+                new Claim(ClaimTypes.Name, dbUser.KullaniciAdi),
+                new Claim(ClaimTypes.Role, dbUser.Gorevi)
+            };
 
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Secret"]!));
+            var secretKey = _configuration["JwtSettings:Secret"]; // ✅ Secret Key Güncellendi!
+            if (string.IsNullOrWhiteSpace(secretKey))
+            {
+                throw new InvalidOperationException("❌ JWT Secret key ayarlanmamış! Lütfen appsettings.json içine ekleyin.");
+            }
+
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+
+            // ✅ **Token süresini UTC olarak ayarla**
             var expiresAt = DateTime.UtcNow.AddHours(2);
 
             var token = new JwtSecurityToken(
-                issuer: _configuration["Jwt:Issuer"],
-                audience: _configuration["Jwt:Audience"],
+                issuer: _configuration["JwtSettings:Issuer"],   // ✅ Doğru yapılandırma
+                audience: _configuration["JwtSettings:Audience"], // ✅ Doğru yapılandırma
                 claims: claims,
                 expires: expiresAt,
                 signingCredentials: creds
@@ -63,39 +71,57 @@ namespace BenimSalonumAPI.DataAccess.Services
                 Token = tokenString,
                 Expiration = expiresAt,
                 Username = dbUser.KullaniciAdi,
-                Role = dbUser.Gorevi // ✅ Password alanı kaldırıldı!
+                Role = dbUser.Gorevi
             };
 
             await _context.UserJwtTokens.AddAsync(userToken);
             await _context.SaveChangesAsync();
 
+            Console.WriteLine($"✅ Yeni Access Token oluşturuldu: {tokenString}");
             return tokenString;
         }
 
-
-
-
-
-
-        // **🔹 2️⃣ TOKEN DOĞRULAMA METODU**
+        // ✅ **Refresh & Access Token Doğrulama Metodu**
         public async Task<bool> ValidateToken(string token)
         {
-            var existingToken = await _context.UserJwtTokens.FirstOrDefaultAsync(t => t.Token == token);
+            var refreshToken = await _context.RefreshTokens.FirstOrDefaultAsync(t => t.Token == token);
+            var accessToken = await _context.UserJwtTokens.FirstOrDefaultAsync(t => t.Token == token);
 
-            if (existingToken == null)
+            if (accessToken == null && refreshToken == null)
             {
                 Console.WriteLine("❌ Token veritabanında bulunamadı.");
                 return false;
             }
 
-            if (existingToken.Expiration < DateTime.UtcNow)
+            if (refreshToken != null)
             {
-                Console.WriteLine("❌ Token süresi dolmuş!");
-                _context.UserJwtTokens.Remove(existingToken);
-                await _context.SaveChangesAsync();
-                return false;
+                if (refreshToken.IsRevoked)
+                {
+                    Console.WriteLine("❌ Refresh Token iptal edilmiş!");
+                    return false;
+                }
+
+                if (refreshToken.Expires < DateTime.UtcNow)
+                {
+                    Console.WriteLine("❌ Refresh Token süresi dolmuş! Veritabanından siliniyor.");
+                    _context.RefreshTokens.Remove(refreshToken);
+                    await _context.SaveChangesAsync();
+                    return false;
+                }
             }
 
+            if (accessToken != null)
+            {
+                if (accessToken.Expiration < DateTime.UtcNow)
+                {
+                    Console.WriteLine("❌ Access Token süresi dolmuş! Veritabanından siliniyor.");
+                    _context.UserJwtTokens.Remove(accessToken);
+                    await _context.SaveChangesAsync();
+                    return false;
+                }
+            }
+
+            Console.WriteLine($"✅ Token geçerli: {token}");
             return true;
         }
     }

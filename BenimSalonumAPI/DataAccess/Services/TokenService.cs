@@ -21,7 +21,14 @@ namespace BenimSalonumAPI.DataAccess.Services
         // 📌 **Access Token Üret**
         public string GenerateAccessToken(string userId)
         {
-            var key = Encoding.UTF8.GetBytes(_config["Jwt:Secret"]);
+            var secretKey = _config["JwtSettings:Secret"]; // ✅ Doğru Secret Key alınıyor
+            if (string.IsNullOrWhiteSpace(secretKey))
+            {
+                throw new InvalidOperationException("❌ JWT Secret key ayarlanmamış! Lütfen appsettings.json içine ekleyin.");
+            }
+
+            var key = Encoding.UTF8.GetBytes(secretKey);
+
             var claims = new[]
             {
                 new Claim(JwtRegisteredClaimNames.Sub, userId),
@@ -31,8 +38,10 @@ namespace BenimSalonumAPI.DataAccess.Services
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(claims),
-                Expires = DateTime.UtcNow.AddMinutes(15),  // 📌 Access Token süresi (15 dakika)
-                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256)
+                Expires = DateTime.UtcNow.AddHours(2), // ✅ UTC kullanıyoruz
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256),
+                Issuer = _config["JwtSettings:Issuer"],   // ✅ Issuer ekledik
+                Audience = _config["JwtSettings:Audience"] // ✅ Audience ekledik
             };
 
             var tokenHandler = new JwtSecurityTokenHandler();
@@ -43,14 +52,19 @@ namespace BenimSalonumAPI.DataAccess.Services
         // 📌 **Refresh Token Üret**
         public RefreshToken GenerateRefreshToken(string userId)
         {
-            using var rng = new RNGCryptoServiceProvider();
             var randomBytes = new byte[64];
-            rng.GetBytes(randomBytes);
+
+            // ✅ **RNGCryptoServiceProvider yerine daha güvenli `RandomNumberGenerator` kullandık**
+            using (var rng = RandomNumberGenerator.Create())
+            {
+                rng.GetBytes(randomBytes);
+            }
+
             return new RefreshToken
             {
                 UserId = userId,
                 Token = Convert.ToBase64String(randomBytes),
-                Expires = DateTime.UtcNow.AddDays(7),  // 📌 Refresh Token süresi (7 gün)
+                Expires = DateTime.UtcNow.AddDays(7), // ✅ UTC olarak ayarlandı
                 IsRevoked = false
             };
         }

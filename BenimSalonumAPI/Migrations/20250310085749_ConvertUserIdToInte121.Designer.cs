@@ -4,6 +4,7 @@ using BenimSalonumAPI.DataAccess.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BenimSalonumAPI.Migrations
 {
     [DbContext(typeof(BenimSalonumContext))]
-    partial class BenimSalonumContextModelSnapshot : ModelSnapshot
+    [Migration("20250310085749_ConvertUserIdToInte121")]
+    partial class ConvertUserIdToInte121
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

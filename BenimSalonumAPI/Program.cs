@@ -20,6 +20,8 @@ using BenimSalonumAPI;
 
 var builder = WebApplication.CreateBuilder(args);
 
+Console.WriteLine("🚀 API Başlatılıyor...");
+
 // 🔹 **CORS Yapılandırmasını Ekleyelim**
 builder.Services.AddCors(options =>
 {
@@ -31,6 +33,8 @@ builder.Services.AddCors(options =>
     });
 });
 
+Console.WriteLine("✅ CORS ayarlandı!");
+
 // 🔹 **Swagger Servislerini Ekleyelim**
 builder.Services.AddControllers()
     .AddJsonOptions(options =>
@@ -41,39 +45,43 @@ builder.Services.AddControllers()
 builder.Services.AddScoped(typeof(IRepository<>), typeof(DataAccess<>));
 builder.Services.AddScoped<JwtTokenService>();
 builder.Services.AddScoped<TokenService>(); // **Eksik olan TokenService eklendi**
-builder.Services.AddScoped<RefreshTokenRepository>(); // **Eksik olan RefreshTokenRepository eklendi**
+builder.Services.AddScoped<RefreshTokenRepository>();
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "BenimSalonum API", Version = "v1" });
-});
 
-// 🔹 **Yetkilendirme & Kimlik Doğrulama**
-var jwtKey = builder.Configuration["Jwt:Secret"];
-if (string.IsNullOrEmpty(jwtKey))
-{
-    throw new InvalidOperationException("JWT Secret key tanımlanmamış! Lütfen appsettings.json içine ekleyin.");
-}
-
-var key = Encoding.UTF8.GetBytes(jwtKey);
-
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    .AddJwtBearer(options =>
+    // ✅ Swagger’a JWT Authentication ekleyelim
+    c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
-        options.RequireHttpsMetadata = false;
-        options.SaveToken = true;
-        options.TokenValidationParameters = new TokenValidationParameters
-        {
-            ValidateIssuerSigningKey = true,
-            IssuerSigningKey = new SymmetricSecurityKey(key),
-            ValidateIssuer = false,
-            ValidateAudience = false,
-            RequireExpirationTime = true,
-            ValidateLifetime = true,
-            ClockSkew = TimeSpan.Zero
-        };
+        In = ParameterLocation.Header,
+        Description = "JWT Token'ınızı 'Bearer {token}' formatında girin",
+        Name = "Authorization",
+        Type = SecuritySchemeType.ApiKey,
+        Scheme = "Bearer"
     });
 
+    c.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Type = ReferenceType.SecurityScheme,
+                    Id = "Bearer"
+                }
+            },
+            new string[] {}
+        }
+    });
+});
+
+Console.WriteLine("✅ Swagger yapılandırıldı!");
+
+// 🔹 **JWT Authentication Middleware'i Ekle**
+builder.Services.AddJwtAuthentication(builder.Configuration);
 builder.Services.AddAuthorization();
 
 // 🔹 **Kestrel Yapılandırması**
@@ -84,20 +92,24 @@ builder.WebHost.ConfigureKestrel((context, options) =>
 
 // 🔹 **1. Şifreyi Oku & Çöz**
 var encryptedPassword = builder.Configuration["DatabaseSettings:Password"]
-    ?? throw new InvalidOperationException("Şifre bulunamadı! Lütfen SetDatabasePassword ile şifre belirleyin.");
+    ?? throw new InvalidOperationException("🔴 Şifre bulunamadı! Lütfen SetDatabasePassword ile şifre belirleyin.");
 
 var decryptedPassword = AesEncryption.Decrypt(encryptedPassword)
-    ?? throw new InvalidOperationException("Şifre çözülemedi! Lütfen SetDatabasePassword ile şifreyi tekrar belirleyin.");
+    ?? throw new InvalidOperationException("🔴 Şifre çözülemedi! Lütfen SetDatabasePassword ile şifreyi tekrar belirleyin.");
+
+Console.WriteLine("✅ Şifre başarıyla çözüldü!");
 
 // 🔹 **2. Connection String'i Oku & Güncelle**
 var connectionStringTemplate = builder.Configuration.GetConnectionString("DefaultConnection")
-    ?? throw new InvalidOperationException("ConnectionStrings:DefaultConnection eksik!");
+    ?? throw new InvalidOperationException("🔴 ConnectionStrings:DefaultConnection eksik!");
 
 string finalConnectionString = connectionStringTemplate.Replace("ENC(YOUR_ENCRYPTED_PASSWORD_HERE)", decryptedPassword);
 
 // 🔹 **3. DbContext Konfigurasyonu**
 builder.Services.AddDbContext<BenimSalonumContext>(options =>
     options.UseSqlServer(finalConnectionString));
+
+Console.WriteLine("✅ Veritabanı bağlantısı için DbContext ayarlandı!");
 
 // 🔹 **Bağlantıyı Test Et**
 try
@@ -113,7 +125,17 @@ catch (Exception ex)
 
 // 🔹 **Uygulama Oluştur & Middleware'leri Ekle**
 var app = builder.Build();
-app.MigrateDatabase();
+
+// 🔹 **Veritabanı Migrasyonu Çalıştır**
+try
+{
+    app.MigrateDatabase();
+    Console.WriteLine("✅ Veritabanı migrasyonu başarıyla tamamlandı.");
+}
+catch (Exception ex)
+{
+    Console.WriteLine($"❌ Veritabanı migrasyonu başarısız: {ex.Message}");
+}
 
 // 🔹 **✅ TrialData'yı Çağırarak Test Verilerini Yükle**
 using (var scope = app.Services.CreateScope())
@@ -142,23 +164,25 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI(c =>
     {
         c.SwaggerEndpoint("/swagger/v1/swagger.json", "BenimSalonum API v1");
+        c.InjectJavascript("/swagger-ui/custom.js"); // ✅ Swagger'da 'Authorize' butonunu vurgulamak için
     });
 }
 
 // 🔹 **Middleware'ler**
-//app.UseHttpsRedirection();
-
-app.UseAuthorization();
 app.UseRouting();
+
+// 🔹 **CORS'u aktif et**
+Console.WriteLine("✅ CORS aktif ediliyor...");
+app.UseCors("AllowAll");
+
 app.UseAuthentication();
+app.UseAuthorization();
 
 app.UseEndpoints(endpoints =>
 {
     endpoints.MapControllers();
 });
 
-// 🔹 **CORS'u aktif et**
-app.UseCors("AllowAll");
-
 // 🔹 **API'yi Başlat**
+Console.WriteLine("🚀 API çalışmaya başladı...");
 app.Run();
