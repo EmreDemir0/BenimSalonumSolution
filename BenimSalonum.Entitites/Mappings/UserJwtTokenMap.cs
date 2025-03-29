@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using BenimSalonum.Entities.Tables;
 
@@ -12,7 +12,7 @@ public class UserJwtTokenMap : IEntityTypeConfiguration<UserJwtToken>
 
         builder.Property(x => x.Username).IsRequired().HasMaxLength(50);
         builder.Property(x => x.Role).HasMaxLength(50);
-        builder.Property(x => x.Token).HasMaxLength(500);
+        builder.Property(x => x.Token).HasMaxLength(2000); // Token boyutunu 2000 karaktere çıkardık
         builder.Property(x => x.Expiration).IsRequired();
 
         // Foreign Key (Kullanicilar ile bağlantı)

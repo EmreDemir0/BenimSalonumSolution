@@ -22,6 +22,145 @@ namespace BenimSalonumAPI.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("BenimSalonum.Entities.Tables.AyarlarTable", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Aciklama")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<bool>("AktifMi")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(true);
+
+                    b.Property<string>("AyarAdi")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("AyarDegeri")
+                        .IsRequired()
+                        .HasMaxLength(1000)
+                        .HasColumnType("nvarchar(1000)");
+
+                    b.Property<string>("AyarGrubu")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("EFaturaEntegratorUrl")
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<string>("EFaturaKullanici")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("EFaturaSifre")
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<DateTime?>("GuncellenmeTarihi")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("GuncelleyenKullaniciId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("MailGonderenAdi")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("MailHost")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("MailKullanici")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<int?>("MailPort")
+                        .HasColumnType("int");
+
+                    b.Property<string>("MailSifre")
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<bool?>("MailSsl")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("OlusturanKullaniciId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("OlusturmaTarihi")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETDATE()");
+
+                    b.Property<int>("SiraNo")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(0);
+
+                    b.Property<string>("SmsApiKey")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("SmsApiSecret")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("SmsApiUrl")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("SmsTitleId")
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
+
+                    b.Property<int>("SubeId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(0);
+
+                    b.Property<string>("WhatsappApiKey")
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<string>("WhatsappInstanceId")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("WhatsappPhoneNumber")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<int?>("YedeklemePeriyodu")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("YedeklemeSaati")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("YedeklemeSaklama")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AyarGrubu")
+                        .HasDatabaseName("IX_Ayarlar_AyarGrubu");
+
+                    b.HasIndex("SubeId", "AyarAdi")
+                        .IsUnique()
+                        .HasDatabaseName("IX_Ayarlar_SubeId_AyarAdi");
+
+                    b.ToTable("Ayarlar");
+                });
+
             modelBuilder.Entity("BenimSalonum.Entities.Tables.CariTable", b =>
                 {
                     b.Property<int>("Id")
@@ -71,9 +210,26 @@ namespace BenimSalonumAPI.Migrations
                         .HasColumnType("bit")
                         .HasDefaultValue(true);
 
+                    b.Property<bool>("EArsivKullanicisi")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("EFaturaKullanicisi")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("EFaturaPostaKutusu")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<bool>("EIrsaliyeKullanicisi")
+                        .HasColumnType("bit");
+
                     b.Property<string>("EMail")
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("EticaretVergiNo")
+                        .HasMaxLength(36)
+                        .HasColumnType("nvarchar(36)");
 
                     b.Property<string>("FaturaUnvani")
                         .IsRequired()
@@ -83,6 +239,15 @@ namespace BenimSalonumAPI.Migrations
                     b.Property<string>("Fax")
                         .HasMaxLength(15)
                         .HasColumnType("nvarchar(15)");
+
+                    b.Property<bool>("FirmaMi")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("GuncellenmeTarihi")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("GuncelleyenKullaniciId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Il")
                         .IsRequired()
@@ -95,6 +260,9 @@ namespace BenimSalonumAPI.Migrations
 
                     b.Property<decimal?>("IskontoOrani")
                         .HasColumnType("decimal(18,2)");
+
+                    b.Property<int>("KaydedenKullaniciId")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("KayitTarihi")
                         .ValueGeneratedOnAdd()
@@ -123,6 +291,10 @@ namespace BenimSalonumAPI.Migrations
                     b.Property<string>("Semt")
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("TCKN")
+                        .HasMaxLength(11)
+                        .HasColumnType("nvarchar(11)");
 
                     b.Property<string>("Telefon")
                         .HasMaxLength(15)
@@ -203,6 +375,757 @@ namespace BenimSalonumAPI.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Depolar");
+                });
+
+            modelBuilder.Entity("BenimSalonum.Entities.Tables.DuyuruTable", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<bool>("AktifMi")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(true);
+
+                    b.Property<string>("Baslik")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<int>("DuyuruTipi")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(1);
+
+                    b.Property<int>("GoruntulenmeSayisi")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(0);
+
+                    b.Property<DateTime?>("GuncellenmeTarihi")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("GuncelleyenKullaniciId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("HedefKitlee")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("HedefSubeId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Icerik")
+                        .IsRequired()
+                        .HasMaxLength(5000)
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("OkunduBilgisiToplansin")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
+
+                    b.Property<int>("OlusturanKullaniciId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("OlusturmaTarihi")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETDATE()");
+
+                    b.Property<string>("ResimUrl")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<DateTime>("YayinBaslangic")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETDATE()");
+
+                    b.Property<DateTime?>("YayinBitis")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DuyuruTipi")
+                        .HasDatabaseName("IX_Duyuru_DuyuruTipi");
+
+                    b.HasIndex("HedefSubeId")
+                        .HasDatabaseName("IX_Duyuru_HedefSubeId");
+
+                    b.HasIndex("OlusturanKullaniciId")
+                        .HasDatabaseName("IX_Duyuru_OlusturanKullaniciId");
+
+                    b.ToTable("Duyurular");
+                });
+
+            modelBuilder.Entity("BenimSalonum.Entities.Tables.EArsivRaporTable", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Aciklama")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<DateTime>("BaslangicTarihi")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("BitisTarihi")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("Durum")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("GuncellenmeTarihi")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("GuncelleyenKullaniciId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("HataMesaji")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<int>("KullaniciId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("OlusturanKullaniciId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("OlusturmaTarihi")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("RaporNo")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<DateTime>("RaporTarihi")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("RaporUrl")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<int>("SubeId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UUID")
+                        .HasMaxLength(36)
+                        .HasColumnType("nvarchar(36)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Durum");
+
+                    b.HasIndex("RaporNo");
+
+                    b.HasIndex("RaporTarihi");
+
+                    b.HasIndex("SubeId");
+
+                    b.HasIndex("UUID");
+
+                    b.ToTable("EArsivRaporlar", (string)null);
+                });
+
+            modelBuilder.Entity("BenimSalonum.Entities.Tables.EFaturaKontorTable", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Aciklama")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<bool>("Aktif")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("FaturaNo")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<DateTime?>("GuncellenmeTarihi")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("GuncelleyenKullaniciId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("KalanKontor")
+                        .HasColumnType("int");
+
+                    b.Property<int>("KontorTipi")
+                        .HasColumnType("int");
+
+                    b.Property<int>("KullanilanKontor")
+                        .HasColumnType("int");
+
+                    b.Property<int>("OlusturanKullaniciId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("OlusturmaTarihi")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("SatinAlmaTarihi")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("SiparisNo")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<DateTime?>("SonKullanmaTarihi")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("SubeId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ToplamKontor")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("Tutar")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int?>("UstKontorId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("KontorTipi");
+
+                    b.HasIndex("SatinAlmaTarihi");
+
+                    b.HasIndex("SubeId");
+
+                    b.HasIndex("UstKontorId");
+
+                    b.ToTable("EFaturaKontorlar", (string)null);
+                });
+
+            modelBuilder.Entity("BenimSalonum.Entities.Tables.EFaturaLogTable", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Aciklama")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<string>("BelgeNo")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<int?>("EarsivRaporDurumu")
+                        .HasColumnType("int");
+
+                    b.Property<string>("EnvelopeId")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("EttnNo")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<int>("FaturaId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("FaturaTableId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("GibMesajId")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("HataMesaji")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<int>("IslemDurumu")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("IslemTarihi")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETDATE()");
+
+                    b.Property<int>("IslemTuru")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("KontorMiktari")
+                        .HasColumnType("int");
+
+                    b.Property<int>("KullaniciId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("MailAdresi")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<bool>("MailGonderildi")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("MailGonderimTarihi")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("PdfUrl")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<string>("RequestData")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<string>("ResponseData")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<bool>("SmsGonderildi")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("SmsGonderimTarihi")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("TelefonNo")
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<string>("UUID")
+                        .HasMaxLength(36)
+                        .HasColumnType("nvarchar(36)");
+
+                    b.Property<string>("XmlUrl")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<string>("ZrfUrl")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("FaturaId")
+                        .HasDatabaseName("IX_EFaturaLog_FaturaId");
+
+                    b.HasIndex("FaturaTableId");
+
+                    b.HasIndex("IslemDurumu")
+                        .HasDatabaseName("IX_EFaturaLog_IslemDurumu");
+
+                    b.HasIndex("IslemTarihi")
+                        .HasDatabaseName("IX_EFaturaLog_IslemTarihi");
+
+                    b.HasIndex("IslemTuru")
+                        .HasDatabaseName("IX_EFaturaLog_IslemTuru");
+
+                    b.HasIndex("UUID")
+                        .HasDatabaseName("IX_EFaturaLog_UUID");
+
+                    b.ToTable("EFaturaLoglari");
+                });
+
+            modelBuilder.Entity("BenimSalonum.Entities.Tables.FaturaDetayTable", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Aciklama")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<decimal>("AraToplam")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("decimal(18,2)")
+                        .HasDefaultValue(0m);
+
+                    b.Property<string>("Barkod")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("Birim")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<decimal>("BirimFiyat")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("decimal(18,2)")
+                        .HasDefaultValue(0m);
+
+                    b.Property<string>("EfaturaKod")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("EfaturaTip")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<int>("FaturaId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("FaturaTableId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("GTIPNo")
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
+
+                    b.Property<DateTime?>("GuncellenmeTarihi")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("GuncelleyenKullaniciId")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("IndirimOrani")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("decimal(18,2)")
+                        .HasDefaultValue(0m);
+
+                    b.Property<int>("IndirimTuru")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(0);
+
+                    b.Property<decimal>("IndirimTutar")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("decimal(18,2)")
+                        .HasDefaultValue(0m);
+
+                    b.Property<bool>("IskontoUygula")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("KdvDahil")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("KdvOrani")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(0);
+
+                    b.Property<decimal>("KdvTutar")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("decimal(18,2)")
+                        .HasDefaultValue(0m);
+
+                    b.Property<decimal>("Miktar")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("decimal(18,3)")
+                        .HasDefaultValue(0m);
+
+                    b.Property<int>("OlusturanKullaniciId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("OlusturmaTarihi")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETDATE()");
+
+                    b.Property<int>("SiraNo")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(0);
+
+                    b.Property<int?>("StokId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("StokKodu")
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
+
+                    b.Property<string>("TevkifatKodu")
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<decimal?>("TevkifatOrani")
+                        .HasColumnType("decimal(5,2)");
+
+                    b.Property<decimal>("ToplamTutar")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("decimal(18,2)")
+                        .HasDefaultValue(0m);
+
+                    b.Property<string>("UrunAdi")
+                        .IsRequired()
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("FaturaId")
+                        .HasDatabaseName("IX_FaturaDetay_FaturaId");
+
+                    b.HasIndex("FaturaTableId");
+
+                    b.HasIndex("StokId")
+                        .HasDatabaseName("IX_FaturaDetay_StokId");
+
+                    b.ToTable("FaturaDetaylari");
+                });
+
+            modelBuilder.Entity("BenimSalonum.Entities.Tables.FaturaTable", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Aciklama")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<decimal>("AraToplam")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("decimal(18,2)")
+                        .HasDefaultValue(0m);
+
+                    b.Property<string>("BelgeNo")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("CariAdres")
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<int>("CariId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("CariIl")
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
+
+                    b.Property<string>("CariIlce")
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
+
+                    b.Property<string>("CariTckn")
+                        .HasMaxLength(11)
+                        .HasColumnType("nvarchar(11)");
+
+                    b.Property<string>("CariUnvan")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("CariVergiDairesi")
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
+
+                    b.Property<string>("CariVkn")
+                        .HasMaxLength(11)
+                        .HasColumnType("nvarchar(11)");
+
+                    b.Property<int?>("EArsivRaporTableId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("EarsivNo")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<int?>("EarsivRaporId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("EfaturaBasarili")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
+
+                    b.Property<string>("EfaturaDurum")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<DateTime?>("EfaturaGonderimTarihi")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("EfaturaGuid")
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<string>("EfaturaHata")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<string>("EfaturaNo")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("EfaturaPdf")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<string>("EfaturaXml")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<string>("EirsaliyeNo")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("EtiketId")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<int>("FaturaDurumu")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(1);
+
+                    b.Property<string>("FaturaNo")
+                        .IsRequired()
+                        .HasMaxLength(16)
+                        .HasColumnType("nvarchar(16)");
+
+                    b.Property<DateTime>("FaturaTarihi")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("FaturaTipi")
+                        .HasColumnType("int");
+
+                    b.Property<int>("FaturaTuru")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("GenelToplam")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("decimal(18,2)")
+                        .HasDefaultValue(0m);
+
+                    b.Property<string>("GibFaturaDurumu")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<DateTime?>("GuncellenmeTarihi")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("GuncelleyenKullaniciId")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("IndirimTutar")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("decimal(18,2)")
+                        .HasDefaultValue(0m);
+
+                    b.Property<int?>("IptalEdenKullaniciId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("IptalNedeni")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<DateTime?>("IptalTarihi")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("IrsaliyeId")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("KalanTutar")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("decimal(18,2)")
+                        .HasDefaultValue(0m);
+
+                    b.Property<bool>("KdvDahil")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
+
+                    b.Property<decimal>("KdvToplam")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("decimal(18,2)")
+                        .HasDefaultValue(0m);
+
+                    b.Property<int?>("KullanılanKontorAdet")
+                        .HasColumnType("int");
+
+                    b.Property<int>("MaliDonem")
+                        .HasColumnType("int");
+
+                    b.Property<int>("MaliYil")
+                        .HasColumnType("int");
+
+                    b.Property<int>("OdemeDurumu")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(1);
+
+                    b.Property<string>("OdemeSekli")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<decimal>("OdenenTutar")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("decimal(18,2)")
+                        .HasDefaultValue(0m);
+
+                    b.Property<int>("OlusturanKullaniciId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("OlusturmaTarihi")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETDATE()");
+
+                    b.Property<DateTime?>("OnayTarihi")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("OnaylayanKullaniciId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("PostaKutusuId")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<DateTime?>("SevkTarihi")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("SiparisId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SubeId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("VadeTarihi")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CariId")
+                        .HasDatabaseName("IX_Fatura_CariId");
+
+                    b.HasIndex("EArsivRaporTableId");
+
+                    b.HasIndex("FaturaDurumu")
+                        .HasDatabaseName("IX_Fatura_FaturaDurumu");
+
+                    b.HasIndex("FaturaTarihi")
+                        .HasDatabaseName("IX_Fatura_FaturaTarihi");
+
+                    b.HasIndex("OdemeDurumu")
+                        .HasDatabaseName("IX_Fatura_OdemeDurumu");
+
+                    b.HasIndex("SubeId");
+
+                    b.HasIndex("VadeTarihi")
+                        .HasDatabaseName("IX_Fatura_VadeTarihi");
+
+                    b.HasIndex("FaturaNo", "SubeId")
+                        .IsUnique()
+                        .HasDatabaseName("IX_Fatura_FaturaNo_SubeId");
+
+                    b.HasIndex("MaliYil", "MaliDonem")
+                        .HasDatabaseName("IX_Fatura_MaliYil_MaliDonem");
+
+                    b.ToTable("Faturalar");
                 });
 
             modelBuilder.Entity("BenimSalonum.Entities.Tables.FisTable", b =>
@@ -294,6 +1217,71 @@ namespace BenimSalonumAPI.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Fisler");
+                });
+
+            modelBuilder.Entity("BenimSalonum.Entities.Tables.GibMukellefTable", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<bool>("EFaturaKullanicisi")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("EIrsaliyeKullanicisi")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Etiket")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<DateTime?>("GecerlilikTarihi")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("GuncellenmeTarihi")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("GuncelleyenKullaniciId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("OlusturanKullaniciId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("OlusturmaTarihi")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("PostaKutusu")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<DateTime>("SorgulamaTarihi")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Unvan")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("VKN_TCKN")
+                        .IsRequired()
+                        .HasMaxLength(11)
+                        .HasColumnType("nvarchar(11)");
+
+                    b.Property<string>("XmlYanit")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("GecerlilikTarihi");
+
+                    b.HasIndex("SorgulamaTarihi");
+
+                    b.HasIndex("VKN_TCKN")
+                        .IsUnique();
+
+                    b.ToTable("GibMukellefler", (string)null);
                 });
 
             modelBuilder.Entity("BenimSalonum.Entities.Tables.HizliSatisGrupTable", b =>
@@ -460,6 +1448,13 @@ namespace BenimSalonumAPI.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("Detay")
+                        .HasColumnType("text");
+
+                    b.Property<string>("IpAdresi")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
                     b.Property<string>("KullaniciAdi")
                         .IsRequired()
                         .HasMaxLength(50)
@@ -467,6 +1462,9 @@ namespace BenimSalonumAPI.Migrations
 
                     b.Property<DateTime?>("SonGirisTarihi")
                         .HasColumnType("datetime2");
+
+                    b.Property<int?>("SubeId")
+                        .HasColumnType("int");
 
                     b.Property<string>("YapilanIslem")
                         .IsRequired()
@@ -480,7 +1478,13 @@ namespace BenimSalonumAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("KullaniciLoglari");
+                    b.HasIndex("KullaniciAdi");
+
+                    b.HasIndex("SubeId");
+
+                    b.HasIndex("YapilanIslemTarihi");
+
+                    b.ToTable("KullaniciLoglar", (string)null);
                 });
 
             modelBuilder.Entity("BenimSalonum.Entities.Tables.KullaniciRolTable", b =>
@@ -761,6 +1765,105 @@ namespace BenimSalonumAPI.Migrations
                     b.ToTable("Personeller");
                 });
 
+            modelBuilder.Entity("BenimSalonum.Entities.Tables.RandevuTable", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("BaslangicTarihi")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("BitisTarihi")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("Durum")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(1);
+
+                    b.Property<bool>("EmailGonderildi")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
+
+                    b.Property<DateTime?>("GuncellenmeTarihi")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("GuncelleyenKullaniciId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("HatirlatmaTarihi")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("HizmetId")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("IndirimTutari")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("decimal(18,2)")
+                        .HasDefaultValue(0m);
+
+                    b.Property<int>("MusteriId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Notlar")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<int>("OdemeTuruId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(0);
+
+                    b.Property<bool>("OdemeYapildi")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
+
+                    b.Property<int>("OlusturanKullaniciId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("OlusturmaTarihi")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETDATE()");
+
+                    b.Property<int>("PersonelId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("SmsGonderildi")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
+
+                    b.Property<int>("SubeId")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("Tutar")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("decimal(18,2)")
+                        .HasDefaultValue(0m);
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("HizmetId")
+                        .HasDatabaseName("IX_Randevu_HizmetId");
+
+                    b.HasIndex("MusteriId")
+                        .HasDatabaseName("IX_Randevu_MusteriId");
+
+                    b.HasIndex("PersonelId")
+                        .HasDatabaseName("IX_Randevu_PersonelId");
+
+                    b.HasIndex("SubeId")
+                        .HasDatabaseName("IX_Randevu_SubeId");
+
+                    b.ToTable("Randevular");
+                });
+
             modelBuilder.Entity("BenimSalonum.Entities.Tables.RefreshToken", b =>
                 {
                     b.Property<int>("Id")
@@ -809,6 +1912,392 @@ namespace BenimSalonumAPI.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("RefreshTokens", (string)null);
+                });
+
+            modelBuilder.Entity("BenimSalonum.Entities.Tables.SiparisDetayTable", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Aciklama")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<decimal>("AraToplam")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("decimal(18,2)")
+                        .HasDefaultValue(0m);
+
+                    b.Property<string>("Barkod")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("Birim")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<decimal>("BirimFiyat")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("decimal(18,2)")
+                        .HasDefaultValue(0m);
+
+                    b.Property<string>("EticaretSepetItemId")
+                        .HasMaxLength(36)
+                        .HasColumnType("nvarchar(36)");
+
+                    b.Property<string>("EticaretUrunKodu")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<DateTime?>("GuncellenmeTarihi")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("GuncelleyenKullaniciId")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("IndirimOrani")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("decimal(18,2)")
+                        .HasDefaultValue(0m);
+
+                    b.Property<int>("IndirimTuru")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(0);
+
+                    b.Property<decimal>("IndirimTutar")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("decimal(18,2)")
+                        .HasDefaultValue(0m);
+
+                    b.Property<decimal>("KarsilananMiktar")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("decimal(18,3)")
+                        .HasDefaultValue(0m);
+
+                    b.Property<bool>("KdvDahil")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("KdvOrani")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(0);
+
+                    b.Property<decimal>("KdvTutar")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("decimal(18,2)")
+                        .HasDefaultValue(0m);
+
+                    b.Property<decimal>("Miktar")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("decimal(18,3)")
+                        .HasDefaultValue(0m);
+
+                    b.Property<int>("OlusturanKullaniciId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("OlusturmaTarihi")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETDATE()");
+
+                    b.Property<int>("SiparisDurumu")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(1);
+
+                    b.Property<int>("SiparisId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("SiparisTableId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SiraNo")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(0);
+
+                    b.Property<int?>("StokId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("StokKodu")
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
+
+                    b.Property<decimal>("ToplamTutar")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("decimal(18,2)")
+                        .HasDefaultValue(0m);
+
+                    b.Property<string>("UrunAdi")
+                        .IsRequired()
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SiparisId")
+                        .HasDatabaseName("IX_SiparisDetay_SiparisId");
+
+                    b.HasIndex("SiparisTableId");
+
+                    b.HasIndex("StokId")
+                        .HasDatabaseName("IX_SiparisDetay_StokId");
+
+                    b.ToTable("SiparisDetaylari");
+                });
+
+            modelBuilder.Entity("BenimSalonum.Entities.Tables.SiparisTable", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Aciklama")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<decimal>("AraToplam")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("decimal(18,2)")
+                        .HasDefaultValue(0m);
+
+                    b.Property<int>("CariId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("CariUnvan")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<int>("EticaretPlatformu")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(0);
+
+                    b.Property<string>("EticaretSiparisNo")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<int?>("FaturaId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("FaturaKesildi")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
+
+                    b.Property<decimal>("GenelToplam")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("decimal(18,2)")
+                        .HasDefaultValue(0m);
+
+                    b.Property<DateTime?>("GuncellenmeTarihi")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("GuncelleyenKullaniciId")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("IndirimTutar")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("decimal(18,2)")
+                        .HasDefaultValue(0m);
+
+                    b.Property<int?>("IptalEdenKullaniciId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("IptalNedeni")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<DateTime?>("IptalTarihi")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("KargoSirketi")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("KargoTakipNo")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<DateTime?>("KargoTarihi")
+                        .HasColumnType("datetime2");
+
+                    b.Property<decimal>("KargoTutar")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("decimal(18,2)")
+                        .HasDefaultValue(0m);
+
+                    b.Property<decimal>("KdvToplam")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("decimal(18,2)")
+                        .HasDefaultValue(0m);
+
+                    b.Property<int>("MaliYil")
+                        .HasColumnType("int");
+
+                    b.Property<int>("OlusturanKullaniciId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("OlusturmaTarihi")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETDATE()");
+
+                    b.Property<int>("OnayDurumu")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(1);
+
+                    b.Property<DateTime?>("OnayTarihi")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("OnaylayanKullaniciId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SiparisDurumu")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(1);
+
+                    b.Property<string>("SiparisNo")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<DateTime>("SiparisTarihi")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("SiparisTuru")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SubeId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("TelefonNo")
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<DateTime?>("TeslimTarihi")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("TeslimatAdresi")
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<string>("TeslimatIl")
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
+
+                    b.Property<string>("TeslimatIlce")
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CariId")
+                        .HasDatabaseName("IX_Siparis_CariId");
+
+                    b.HasIndex("EticaretPlatformu")
+                        .HasDatabaseName("IX_Siparis_EticaretPlatformu");
+
+                    b.HasIndex("EticaretSiparisNo")
+                        .HasDatabaseName("IX_Siparis_EticaretSiparisNo");
+
+                    b.HasIndex("FaturaId")
+                        .IsUnique()
+                        .HasDatabaseName("IX_Siparis_FaturaId")
+                        .HasFilter("[FaturaId] IS NOT NULL");
+
+                    b.HasIndex("MaliYil")
+                        .HasDatabaseName("IX_Siparis_MaliYil");
+
+                    b.HasIndex("OnayDurumu")
+                        .HasDatabaseName("IX_Siparis_OnayDurumu");
+
+                    b.HasIndex("SiparisDurumu")
+                        .HasDatabaseName("IX_Siparis_SiparisDurumu");
+
+                    b.HasIndex("SiparisTarihi")
+                        .HasDatabaseName("IX_Siparis_SiparisTarihi");
+
+                    b.HasIndex("SubeId");
+
+                    b.HasIndex("SiparisNo", "SubeId")
+                        .IsUnique()
+                        .HasDatabaseName("IX_Siparis_SiparisNo_SubeId");
+
+                    b.ToTable("Siparisler");
+                });
+
+            modelBuilder.Entity("BenimSalonum.Entities.Tables.SistemLogTable", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("Gorünürlük")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(0);
+
+                    b.Property<string>("HataDetay")
+                        .HasColumnType("text");
+
+                    b.Property<int>("HataSeviyesi")
+                        .HasColumnType("int");
+
+                    b.Property<string>("IpAdresi")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("IstekYolu")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<string>("KullaniciAdi")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("Mesaj")
+                        .IsRequired()
+                        .HasMaxLength(2000)
+                        .HasColumnType("nvarchar(2000)");
+
+                    b.Property<string>("Modul")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<int?>("SubeId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("Tarih")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Veri")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Gorünürlük");
+
+                    b.HasIndex("HataSeviyesi");
+
+                    b.HasIndex("KullaniciAdi");
+
+                    b.HasIndex("SubeId");
+
+                    b.HasIndex("Tarih");
+
+                    b.ToTable("SistemLoglar", (string)null);
                 });
 
             modelBuilder.Entity("BenimSalonum.Entities.Tables.StokHareketTable", b =>
@@ -886,14 +2375,10 @@ namespace BenimSalonumAPI.Migrations
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
 
-                    b.Property<decimal?>("AlisFiyati1")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<decimal?>("AlisFiyati2")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<decimal?>("AlisFiyati3")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<decimal>("AlisFiyati")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("decimal(18,2)")
+                        .HasDefaultValue(0m);
 
                     b.Property<int>("AlisKdv")
                         .HasColumnType("int");
@@ -916,9 +2401,38 @@ namespace BenimSalonumAPI.Migrations
                         .HasColumnType("bit")
                         .HasDefaultValue(true);
 
+                    b.Property<int>("FiyatHesaplamaTipi")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(1);
+
                     b.Property<string>("GarantiSuresi")
                         .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)");
+
+                    b.Property<int>("GuncelleyenKullaniciId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(0);
+
+                    b.Property<decimal>("HepsiburadaFiyati")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("decimal(18,2)")
+                        .HasDefaultValue(0m);
+
+                    b.Property<string>("HepsiburadaKodu")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<decimal>("HepsiburadaKomisyon")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("decimal(5,2)")
+                        .HasDefaultValue(0m);
+
+                    b.Property<decimal>("HepsiburadaStokMiktari")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("decimal(18,3)")
+                        .HasDefaultValue(0m);
 
                     b.Property<string>("Marka")
                         .HasMaxLength(50)
@@ -950,17 +2464,18 @@ namespace BenimSalonumAPI.Migrations
                         .HasMaxLength(30)
                         .HasColumnType("nvarchar(30)");
 
-                    b.Property<decimal?>("SatisFiyati1")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<decimal?>("SatisFiyati2")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<decimal?>("SatisFiyati3")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<decimal>("PerakendeFiyati")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("decimal(18,2)")
+                        .HasDefaultValue(0m);
 
                     b.Property<int>("SatisKdv")
                         .HasColumnType("int");
+
+                    b.Property<DateTime>("SonGuncelleme")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETDATE()");
 
                     b.Property<string>("StokAdi")
                         .IsRequired()
@@ -980,13 +2495,184 @@ namespace BenimSalonumAPI.Migrations
                         .HasMaxLength(30)
                         .HasColumnType("nvarchar(30)");
 
+                    b.Property<decimal>("StokMiktari")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("decimal(18,3)")
+                        .HasDefaultValue(0m);
+
+                    b.Property<int>("StokTakipTipi")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(1);
+
+                    b.Property<decimal>("ToplamFiyati")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("decimal(18,2)")
+                        .HasDefaultValue(0m);
+
+                    b.Property<decimal>("TrendyolFiyati")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("decimal(18,2)")
+                        .HasDefaultValue(0m);
+
+                    b.Property<string>("TrendyolKodu")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<decimal>("TrendyolKomisyon")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("decimal(5,2)")
+                        .HasDefaultValue(0m);
+
+                    b.Property<decimal>("TrendyolStokMiktari")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("decimal(18,3)")
+                        .HasDefaultValue(0m);
+
                     b.Property<string>("UreticiKodu")
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
+                    b.Property<string>("WebAciklama")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<decimal>("WebFiyati")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("decimal(18,2)")
+                        .HasDefaultValue(0m);
+
+                    b.Property<string>("WebKodu")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<decimal>("WebKomisyon")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("decimal(5,2)")
+                        .HasDefaultValue(0m);
+
+                    b.Property<decimal>("WebStokMiktari")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("decimal(18,3)")
+                        .HasDefaultValue(0m);
+
                     b.HasKey("Id");
 
                     b.ToTable("Stoklar");
+                });
+
+            modelBuilder.Entity("BenimSalonum.Entities.Tables.SubeTable", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Adres")
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<bool>("AktifMi")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(true);
+
+                    b.Property<bool>("EFaturaKullanimi")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
+
+                    b.Property<bool>("EMailKullanimi")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
+
+                    b.Property<string>("Email")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<bool>("EticaretEntegrasyonu")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
+
+                    b.Property<DateTime?>("GuncellenmeTarihi")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("GuncelleyenKullaniciId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("KullaniciLimiti")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(5);
+
+                    b.Property<DateTime?>("LisansBitisTarihi")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("LisansKodu")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("LogoUrl")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<int>("OlusturanKullaniciId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("OlusturmaTarihi")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETDATE()");
+
+                    b.Property<bool>("SmsKullanimi")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
+
+                    b.Property<string>("SubeAdi")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("SubeKodu")
+                        .IsRequired()
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)");
+
+                    b.Property<string>("Telefon")
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<string>("VergiDairesi")
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<string>("VergiNo")
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<string>("WebSite")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<bool>("WhatsappKullanimi")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AktifMi")
+                        .HasDatabaseName("IX_Sube_AktifMi");
+
+                    b.HasIndex("SubeAdi")
+                        .IsUnique()
+                        .HasDatabaseName("IX_Sube_SubeAdi");
+
+                    b.ToTable("Subeler");
                 });
 
             modelBuilder.Entity("BenimSalonum.Entities.Tables.TanimlarTable", b =>
@@ -1077,8 +2763,8 @@ namespace BenimSalonumAPI.Migrations
 
                     b.Property<string>("Token")
                         .IsRequired()
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
+                        .HasMaxLength(2000)
+                        .HasColumnType("nvarchar(2000)");
 
                     b.Property<int>("UserId")
                         .HasColumnType("int");
@@ -1095,6 +2781,89 @@ namespace BenimSalonumAPI.Migrations
                     b.ToTable("UserJwtTokens", (string)null);
                 });
 
+            modelBuilder.Entity("BenimSalonum.Entities.Tables.EArsivRaporTable", b =>
+                {
+                    b.HasOne("BenimSalonum.Entities.Tables.SubeTable", "Sube")
+                        .WithMany()
+                        .HasForeignKey("SubeId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Sube");
+                });
+
+            modelBuilder.Entity("BenimSalonum.Entities.Tables.EFaturaKontorTable", b =>
+                {
+                    b.HasOne("BenimSalonum.Entities.Tables.SubeTable", "Sube")
+                        .WithMany()
+                        .HasForeignKey("SubeId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("BenimSalonum.Entities.Tables.EFaturaKontorTable", "UstKontor")
+                        .WithMany()
+                        .HasForeignKey("UstKontorId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("Sube");
+
+                    b.Navigation("UstKontor");
+                });
+
+            modelBuilder.Entity("BenimSalonum.Entities.Tables.EFaturaLogTable", b =>
+                {
+                    b.HasOne("BenimSalonum.Entities.Tables.FaturaTable", null)
+                        .WithMany()
+                        .HasForeignKey("FaturaId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("BenimSalonum.Entities.Tables.FaturaTable", null)
+                        .WithMany("EFaturaLoglari")
+                        .HasForeignKey("FaturaTableId");
+                });
+
+            modelBuilder.Entity("BenimSalonum.Entities.Tables.FaturaDetayTable", b =>
+                {
+                    b.HasOne("BenimSalonum.Entities.Tables.FaturaTable", null)
+                        .WithMany()
+                        .HasForeignKey("FaturaId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("BenimSalonum.Entities.Tables.FaturaTable", null)
+                        .WithMany("FaturaDetaylari")
+                        .HasForeignKey("FaturaTableId");
+
+                    b.HasOne("BenimSalonum.Entities.Tables.StokTable", null)
+                        .WithMany()
+                        .HasForeignKey("StokId")
+                        .OnDelete(DeleteBehavior.Restrict);
+                });
+
+            modelBuilder.Entity("BenimSalonum.Entities.Tables.FaturaTable", b =>
+                {
+                    b.HasOne("BenimSalonum.Entities.Tables.CariTable", "Cari")
+                        .WithMany("Faturalar")
+                        .HasForeignKey("CariId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("BenimSalonum.Entities.Tables.EArsivRaporTable", null)
+                        .WithMany("Faturalar")
+                        .HasForeignKey("EArsivRaporTableId");
+
+                    b.HasOne("BenimSalonum.Entities.Tables.SubeTable", "Sube")
+                        .WithMany("Faturalar")
+                        .HasForeignKey("SubeId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Cari");
+
+                    b.Navigation("Sube");
+                });
+
             modelBuilder.Entity("BenimSalonum.Entities.Tables.HizliSatisUrunTable", b =>
                 {
                     b.HasOne("BenimSalonum.Entities.Tables.HizliSatisGrupTable", "HizliSatisGrup")
@@ -1104,6 +2873,85 @@ namespace BenimSalonumAPI.Migrations
                         .IsRequired();
 
                     b.Navigation("HizliSatisGrup");
+                });
+
+            modelBuilder.Entity("BenimSalonum.Entities.Tables.KullaniciLogTable", b =>
+                {
+                    b.HasOne("BenimSalonum.Entities.Tables.SubeTable", "Sube")
+                        .WithMany()
+                        .HasForeignKey("SubeId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("Sube");
+                });
+
+            modelBuilder.Entity("BenimSalonum.Entities.Tables.RandevuTable", b =>
+                {
+                    b.HasOne("BenimSalonum.Entities.Tables.CariTable", null)
+                        .WithMany()
+                        .HasForeignKey("MusteriId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("BenimSalonum.Entities.Tables.PersonelTable", null)
+                        .WithMany()
+                        .HasForeignKey("PersonelId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("BenimSalonum.Entities.Tables.SiparisDetayTable", b =>
+                {
+                    b.HasOne("BenimSalonum.Entities.Tables.SiparisTable", null)
+                        .WithMany()
+                        .HasForeignKey("SiparisId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("BenimSalonum.Entities.Tables.SiparisTable", null)
+                        .WithMany("SiparisDetaylari")
+                        .HasForeignKey("SiparisTableId");
+
+                    b.HasOne("BenimSalonum.Entities.Tables.StokTable", null)
+                        .WithMany()
+                        .HasForeignKey("StokId")
+                        .OnDelete(DeleteBehavior.Restrict);
+                });
+
+            modelBuilder.Entity("BenimSalonum.Entities.Tables.SiparisTable", b =>
+                {
+                    b.HasOne("BenimSalonum.Entities.Tables.CariTable", "Cari")
+                        .WithMany("Siparisler")
+                        .HasForeignKey("CariId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("BenimSalonum.Entities.Tables.FaturaTable", "Fatura")
+                        .WithOne("Siparis")
+                        .HasForeignKey("BenimSalonum.Entities.Tables.SiparisTable", "FaturaId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("BenimSalonum.Entities.Tables.SubeTable", "Sube")
+                        .WithMany("Siparisler")
+                        .HasForeignKey("SubeId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Cari");
+
+                    b.Navigation("Fatura");
+
+                    b.Navigation("Sube");
+                });
+
+            modelBuilder.Entity("BenimSalonum.Entities.Tables.SistemLogTable", b =>
+                {
+                    b.HasOne("BenimSalonum.Entities.Tables.SubeTable", "Sube")
+                        .WithMany()
+                        .HasForeignKey("SubeId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("Sube");
                 });
 
             modelBuilder.Entity("BenimSalonum.Entities.Tables.StokHareketTable", b =>
@@ -1141,9 +2989,42 @@ namespace BenimSalonumAPI.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("BenimSalonum.Entities.Tables.CariTable", b =>
+                {
+                    b.Navigation("Faturalar");
+
+                    b.Navigation("Siparisler");
+                });
+
+            modelBuilder.Entity("BenimSalonum.Entities.Tables.EArsivRaporTable", b =>
+                {
+                    b.Navigation("Faturalar");
+                });
+
+            modelBuilder.Entity("BenimSalonum.Entities.Tables.FaturaTable", b =>
+                {
+                    b.Navigation("EFaturaLoglari");
+
+                    b.Navigation("FaturaDetaylari");
+
+                    b.Navigation("Siparis");
+                });
+
             modelBuilder.Entity("BenimSalonum.Entities.Tables.OdemeTuruTable", b =>
                 {
                     b.Navigation("KasaHareketleri");
+                });
+
+            modelBuilder.Entity("BenimSalonum.Entities.Tables.SiparisTable", b =>
+                {
+                    b.Navigation("SiparisDetaylari");
+                });
+
+            modelBuilder.Entity("BenimSalonum.Entities.Tables.SubeTable", b =>
+                {
+                    b.Navigation("Faturalar");
+
+                    b.Navigation("Siparisler");
                 });
 #pragma warning restore 612, 618
         }

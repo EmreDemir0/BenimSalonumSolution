@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, ...</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, ...</value></resheader>
+  <data name="UsernameLabel" xml:space="preserve"><value>Benutzername</value></data>
+  <data name="PasswordLabel" xml:space="preserve"><value>Passwort</value></data>
+  <data name="LoginButton" xml:space="preserve"><value>Anmelden</value></data>
+  <data name="ForgotPassword" xml:space="preserve"><value>Passwort vergessen</value></data>
+  <data name="LoginError" xml:space="preserve"><value>Anmeldung fehlgeschlagen!</value></data>
+  <data name="TooManyAttempts" xml:space="preserve"><value>Zu viele fehlgeschlagene Versuche. Bitte in 5 Minuten erneut versuchen.</value></data>
+  <data name="ResetSuccess" xml:space="preserve"><value>Passwort erfolgreich geändert.</value></data>
+  <data name="ResetFail" xml:space="preserve"><value>Passwort zurücksetzen fehlgeschlagen.</value></data>
+  <data name="AllFieldsRequired" xml:space="preserve"><value>Bitte füllen Sie alle Felder aus.</value></data>
+  <data name="UsernamePlaceholder" xml:space="preserve"><value>Benutzername eingeben</value></data>
+  <data name="PasswordPlaceholder" xml:space="preserve"><value>Passwort eingeben</value></data>
+  <data name="ShowPassword" xml:space="preserve"><value>Passwort anzeigen</value></data>
+  <data name="HidePassword" xml:space="preserve"><value>Passwort verbergen</value></data>
+  <data name="RetryAfterMessage" xml:space="preserve"><value>Bitte versuchen Sie es in {0} Sekunden erneut</value></data>
+</root>

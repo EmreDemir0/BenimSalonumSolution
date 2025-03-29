@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.Extensions.Configuration;
 using Microsoft.OpenApi.Models;
@@ -17,6 +17,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using BenimSalonumAPI;
+using BenimSalonumAPI.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -42,10 +43,20 @@ builder.Services.AddControllers()
         options.JsonSerializerOptions.PropertyNameCaseInsensitive = true;
     });
 
+// 🔹 **HTTP Client**
+builder.Services.AddHttpClient<OrkestraEFaturaService>();
+
+// 🔹 **Servisler ve Repository'ler**
 builder.Services.AddScoped(typeof(IRepository<>), typeof(DataAccess<>));
 builder.Services.AddScoped<JwtTokenService>();
 builder.Services.AddScoped<TokenService>(); // **Eksik olan TokenService eklendi**
 builder.Services.AddScoped<RefreshTokenRepository>();
+// Yeni eklenen servisler
+builder.Services.AddScoped<ILogService, LogService>();
+builder.Services.AddScoped<OrkestraEFaturaService>();
+
+// 🔹 **HTTP Context Accessor**
+builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
@@ -122,6 +133,7 @@ catch (Exception ex)
 {
     Console.WriteLine($"❌ Veritabanı bağlantısı başarısız: {ex.Message}");
 }
+
 
 // 🔹 **Uygulama Oluştur & Middleware'leri Ekle**
 var app = builder.Build();

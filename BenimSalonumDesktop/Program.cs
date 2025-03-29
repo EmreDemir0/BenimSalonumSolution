@@ -1,17 +1,27 @@
+using System;
+using System.Globalization;
+using System.IO;
+using System.Threading;
+using System.Windows.Forms;
+
 namespace BenimSalonumDesktop
 {
     internal static class Program
     {
-        /// <summary>
-        ///  The main entry point for the application.
-        /// </summary>
         [STAThread]
         static void Main()
         {
-            // To customize application configuration such as set high DPI settings or default font,
-            // see https://aka.ms/applicationconfiguration.
+            // Uygulama açılışında kayıtlı dili ayarla
+            var savedCulture = Settings.Default.AppCulture;
+            if (!string.IsNullOrEmpty(savedCulture))
+            {
+                Thread.CurrentThread.CurrentCulture = new CultureInfo(savedCulture);
+                Thread.CurrentThread.CurrentUICulture = new CultureInfo(savedCulture);
+            }
+
             ApplicationConfiguration.Initialize();
-            Application.Run(new Form1());
+            Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("Ngo9BigBOggjHTQxAR8/V1NMaF5cXmBCf1FpRmJGdld5fUVHYVZUTXxaS00DNHVRdkdmWXxccXRTRGdcUUd+W0A=");
+            Application.Run(new LoginForm());
         }
     }
 }

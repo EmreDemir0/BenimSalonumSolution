@@ -39,14 +39,26 @@ namespace BenimSalonum.Entities.Validations
             RuleFor(x => x.SatisKdv)
                 .InclusiveBetween(0, 100).WithMessage("Satış KDV oranı %0 ile %100 arasında olmalıdır.");
 
-            // **AlisFiyati** ve **SatisFiyati** pozitif olmalı (isteğe bağlı)
-            RuleFor(x => x.AlisFiyati1)
-                .GreaterThanOrEqualTo(0).WithMessage("Alış Fiyatı negatif olamaz.")
-                .When(x => x.AlisFiyati1.HasValue);
+            // **AlisFiyati** ve **PerakendeFiyati** pozitif olmalı
+            RuleFor(x => x.AlisFiyati)
+                .GreaterThanOrEqualTo(0).WithMessage("Alış Fiyatı negatif olamaz.");
 
-            RuleFor(x => x.SatisFiyati1)
-                .GreaterThanOrEqualTo(0).WithMessage("Satış Fiyatı negatif olamaz.")
-                .When(x => x.SatisFiyati1.HasValue);
+            RuleFor(x => x.PerakendeFiyati)
+                .GreaterThanOrEqualTo(0).WithMessage("Perakende Fiyatı negatif olamaz.");
+
+            // **ToplamFiyati** pozitif olmalı
+            RuleFor(x => x.ToplamFiyati)
+                .GreaterThanOrEqualTo(0).WithMessage("Toptan Fiyatı negatif olamaz.");
+
+            // Web, Trendyol ve Hepsiburada fiyatları negatif olmamalı
+            RuleFor(x => x.WebFiyati)
+                .GreaterThanOrEqualTo(0).WithMessage("Web Fiyatı negatif olamaz.");
+
+            RuleFor(x => x.TrendyolFiyati)
+                .GreaterThanOrEqualTo(0).WithMessage("Trendyol Fiyatı negatif olamaz.");
+
+            RuleFor(x => x.HepsiburadaFiyati)
+                .GreaterThanOrEqualTo(0).WithMessage("Hepsiburada Fiyatı negatif olamaz.");
 
             // **MinStokMiktari** ve **MaxStokMiktari** pozitif olmalı (isteğe bağlı)
             RuleFor(x => x.MinStokMiktari)
@@ -61,6 +73,28 @@ namespace BenimSalonum.Entities.Validations
             RuleFor(x => x.Aciklama)
                 .MaximumLength(500).WithMessage("Açıklama en fazla 500 karakter olabilir.")
                 .When(x => !string.IsNullOrEmpty(x.Aciklama)); // Eğer Aciklama varsa, kontrol edilmelidir
+
+            // **WebAciklama** 500 karakteri geçemez (isteğe bağlı)
+            RuleFor(x => x.WebAciklama)
+                .MaximumLength(500).WithMessage("Web Açıklaması en fazla 500 karakter olabilir.")
+                .When(x => !string.IsNullOrEmpty(x.WebAciklama));
+
+            // Diğer isteğe bağlı alan kontrolleri
+            RuleFor(x => x.StokGrubu)
+                .MaximumLength(50).WithMessage("Stok Grubu en fazla 50 karakter olabilir.")
+                .When(x => !string.IsNullOrEmpty(x.StokGrubu));
+
+            RuleFor(x => x.StokAltGrubu)
+                .MaximumLength(50).WithMessage("Stok Alt Grubu en fazla 50 karakter olabilir.")
+                .When(x => !string.IsNullOrEmpty(x.StokAltGrubu));
+
+            RuleFor(x => x.Marka)
+                .MaximumLength(50).WithMessage("Marka en fazla 50 karakter olabilir.")
+                .When(x => !string.IsNullOrEmpty(x.Marka));
+
+            RuleFor(x => x.Modeli)
+                .MaximumLength(50).WithMessage("Model en fazla 50 karakter olabilir.")
+                .When(x => !string.IsNullOrEmpty(x.Modeli));
         }
     }
 }

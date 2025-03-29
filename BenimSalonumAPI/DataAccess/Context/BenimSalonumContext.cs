@@ -1,5 +1,6 @@
-﻿using BenimSalonum.Entities.Mapping;
+using BenimSalonum.Entities.Mapping;
 using BenimSalonum.Entities.Tables;
+using BenimSalonum.Entities.Mappings;
 using Microsoft.EntityFrameworkCore;
 
 namespace BenimSalonumAPI.DataAccess.Context
@@ -32,6 +33,25 @@ namespace BenimSalonumAPI.DataAccess.Context
         public DbSet<TanimlarTable> Tanimlar { get; set; }
         public DbSet<UserJwtToken> UserJwtTokens { get; set; }
 
+        // Yeni eklenen DbSet'ler
+        public DbSet<SubeTable> Subeler { get; set; }
+        public DbSet<FaturaTable> Faturalar { get; set; }
+        public DbSet<FaturaDetayTable> FaturaDetaylari { get; set; }
+        public DbSet<SiparisTable> Siparisler { get; set; }
+        public DbSet<SiparisDetayTable> SiparisDetaylari { get; set; }
+        public DbSet<EFaturaLogTable> EFaturaLoglari { get; set; }
+        public DbSet<RandevuTable> Randevular { get; set; }
+        public DbSet<DuyuruTable> Duyurular { get; set; }
+        public DbSet<AyarlarTable> Ayarlar { get; set; }
+
+        // E-Fatura WSDL entegrasyonu için yeni eklenen DbSet'ler
+        public DbSet<EFaturaKontorTable> EFaturaKontorlar { get; set; }
+        public DbSet<GibMukellefTable> GibMukellefler { get; set; }
+        public DbSet<EArsivRaporTable> EArsivRaporlar { get; set; }
+        
+        // Gelişmiş loglama için yeni eklenen DbSet
+        public DbSet<SistemLogTable> SistemLoglar { get; set; }
+
         // 🔹 **Model mapping**
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -60,6 +80,18 @@ namespace BenimSalonumAPI.DataAccess.Context
 
             // 🔹 **Yeni RefreshToken Mapping'i ekleyelim**
             modelBuilder.ApplyConfiguration(new RefreshTokenMap());
+            
+            // Yeni eklenen mappingler
+            modelBuilder.ApplyConfiguration(new SubeTableMap());
+            modelBuilder.ApplyConfiguration(new FaturaTableMap());
+            modelBuilder.ApplyConfiguration(new FaturaDetayTableMap());
+            modelBuilder.ApplyConfiguration(new SiparisTableMap());
+            modelBuilder.ApplyConfiguration(new SiparisDetayTableMap());
+            modelBuilder.ApplyConfiguration(new EFaturaLogTableMap());
+            modelBuilder.ApplyConfiguration(new RandevuTableMap());
+            modelBuilder.ApplyConfiguration(new DuyuruTableMap());
+            modelBuilder.ApplyConfiguration(new AyarlarTableMap());
+            modelBuilder.ApplyConfiguration(new SistemLogTableMap());
         }
     }
 }

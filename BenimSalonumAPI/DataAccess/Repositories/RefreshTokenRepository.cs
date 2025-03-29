@@ -58,5 +58,24 @@ namespace BenimSalonumAPI.DataAccess.Repositories
             await _context.SaveChangesAsync();
             Console.WriteLine($"✅ Kullanıcının ({userId}) tüm access tokenları silindi.");
         }
+        public async Task RevokeDuplicateDeviceTokens(string userId, string deviceName, string platform, string userAgent)
+        {
+            var existingTokens = await _context.RefreshTokens
+                .Where(x => x.UserId == userId && !x.IsRevoked
+                    && x.DeviceName == deviceName
+                    && x.Platform == platform
+                    && x.UserAgent == userAgent)
+                .ToListAsync();
+
+            if (existingTokens.Any())
+            {
+                foreach (var token in existingTokens)
+                    token.IsRevoked = true;
+
+                await _context.SaveChangesAsync();
+                Console.WriteLine($"🔄 Aynı cihazdan gelen eski refresh tokenlar iptal edildi.");
+            }
+        }
+
     }
 }

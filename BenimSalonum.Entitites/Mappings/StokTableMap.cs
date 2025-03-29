@@ -9,24 +9,24 @@ namespace BenimSalonum.Entities.Mapping
         public void Configure(EntityTypeBuilder<StokTable> builder)
         {
             // **Primary Key**
-            builder.HasKey(e => e.Id); // Id alaný primary key olarak belirleniyor.
+            builder.HasKey(e => e.Id); // Id alanÄ± primary key olarak belirleniyor.
 
-            // **Varsayýlan deðerler**
+            // **VarsayÄ±lan deÄŸerler**
             builder.Property(e => e.Durumu)
-                   .HasDefaultValue(true); // Varsayýlan olarak aktif stok
+                   .HasDefaultValue(true); // VarsayÄ±lan olarak aktif stok
 
-            // **Zorunlu alanlar ve uzunluk sýnýrlarý**
+            // **Zorunlu alanlar ve uzunluk sÄ±nÄ±rlarÄ±**
             builder.Property(e => e.StokKodu)
                    .IsRequired() // StokKodu zorunlu
-                   .HasMaxLength(30); // StokKodu'nun maksimum uzunluðu 30 karakter olacak
+                   .HasMaxLength(30); // StokKodu'nun maksimum uzunluÄŸu 30 karakter olacak
 
             builder.Property(e => e.StokAdi)
                    .IsRequired() // StokAdi zorunlu
-                   .HasMaxLength(100); // StokAdi'nin maksimum uzunluðu 100 karakter olacak
+                   .HasMaxLength(100); // StokAdi'nin maksimum uzunluÄŸu 100 karakter olacak
 
             builder.Property(e => e.Birimi)
                    .IsRequired() // Birimi zorunlu
-                   .HasMaxLength(20); // Birimi'nin maksimum uzunluðu 20 karakter olacak
+                   .HasMaxLength(20); // Birimi'nin maksimum uzunluÄŸu 20 karakter olacak
 
             builder.Property(e => e.AlisKdv)
                    .IsRequired(); // AlisKdv zorunlu
@@ -34,70 +34,134 @@ namespace BenimSalonum.Entities.Mapping
             builder.Property(e => e.SatisKdv)
                    .IsRequired(); // SatisKdv zorunlu
 
-            // **Ýsteðe baðlý alanlar (nullable)**
+            // **Ä°steÄŸe baÄŸlÄ± alanlar (nullable)**
             builder.Property(e => e.Barkod)
-                   .HasMaxLength(50); // Barkod, isteðe baðlý, maksimum uzunluk 50 karakter
+                   .HasMaxLength(50); // Barkod, isteÄŸe baÄŸlÄ±, maksimum uzunluk 50 karakter
 
             builder.Property(e => e.BarkodTuru)
-                   .HasMaxLength(20); // BarkodTuru, isteðe baðlý, maksimum uzunluk 20 karakter
+                   .HasMaxLength(20); // BarkodTuru, isteÄŸe baÄŸlÄ±, maksimum uzunluk 20 karakter
 
             builder.Property(e => e.StokGrubu)
-                   .HasMaxLength(50); // StokGrubu, isteðe baðlý, maksimum uzunluk 50 karakter
+                   .HasMaxLength(50); // StokGrubu, isteÄŸe baÄŸlÄ±, maksimum uzunluk 50 karakter
 
             builder.Property(e => e.StokAltGrubu)
-                   .HasMaxLength(50); // StokAltGrubu, isteðe baðlý, maksimum uzunluk 50 karakter
+                   .HasMaxLength(50); // StokAltGrubu, isteÄŸe baÄŸlÄ±, maksimum uzunluk 50 karakter
 
             builder.Property(e => e.Marka)
-                   .HasMaxLength(50); // Marka, isteðe baðlý, maksimum uzunluk 50 karakter
+                   .HasMaxLength(50); // Marka, isteÄŸe baÄŸlÄ±, maksimum uzunluk 50 karakter
 
             builder.Property(e => e.Modeli)
-                   .HasMaxLength(50); // Modeli, isteðe baðlý, maksimum uzunluk 50 karakter
+                   .HasMaxLength(50); // Modeli, isteÄŸe baÄŸlÄ±, maksimum uzunluk 50 karakter
 
             builder.Property(e => e.OzelKod1)
-                   .HasMaxLength(30); // OzelKod1, isteðe baðlý, maksimum uzunluk 30 karakter
+                   .HasMaxLength(30); // OzelKod1, isteÄŸe baÄŸlÄ±, maksimum uzunluk 30 karakter
 
             builder.Property(e => e.OzelKod2)
-                   .HasMaxLength(30); // OzelKod2, isteðe baðlý, maksimum uzunluk 30 karakter
+                   .HasMaxLength(30); // OzelKod2, isteÄŸe baÄŸlÄ±, maksimum uzunluk 30 karakter
 
             builder.Property(e => e.OzelKod3)
-                   .HasMaxLength(30); // OzelKod3, isteðe baðlý, maksimum uzunluk 30 karakter
+                   .HasMaxLength(30); // OzelKod3, isteÄŸe baÄŸlÄ±, maksimum uzunluk 30 karakter
 
             builder.Property(e => e.OzelKod4)
-                   .HasMaxLength(30); // OzelKod4, isteðe baðlý, maksimum uzunluk 30 karakter
+                   .HasMaxLength(30); // OzelKod4, isteÄŸe baÄŸlÄ±, maksimum uzunluk 30 karakter
 
             builder.Property(e => e.GarantiSuresi)
-                   .HasMaxLength(20); // GarantiSuresi, isteðe baðlý, maksimum uzunluk 20 karakter
+                   .HasMaxLength(20); // GarantiSuresi, isteÄŸe baÄŸlÄ±, maksimum uzunluk 20 karakter
 
             builder.Property(e => e.UreticiKodu)
-                   .HasMaxLength(50); // UreticiKodu, isteðe baðlý, maksimum uzunluk 50 karakter
+                   .HasMaxLength(50); // UreticiKodu, isteÄŸe baÄŸlÄ±, maksimum uzunluk 50 karakter
 
-            // **Decimal Alanlar**
-            builder.Property(e => e.AlisFiyati1)
-                   .HasColumnType("decimal(18,2)"); // AlisFiyati1, decimal(18,2) formatýnda
+            // **Stok MiktarlarÄ±**
+            builder.Property(e => e.StokMiktari)
+                   .HasColumnType("decimal(18,3)")
+                   .HasDefaultValue(0); // Genel stok miktarÄ±
 
-            builder.Property(e => e.AlisFiyati2)
-                   .HasColumnType("decimal(18,2)"); // AlisFiyati2, decimal(18,2) formatýnda
+            builder.Property(e => e.WebStokMiktari)
+                   .HasColumnType("decimal(18,3)")
+                   .HasDefaultValue(0); // Web sitesi iÃ§in stok miktarÄ±
 
-            builder.Property(e => e.AlisFiyati3)
-                   .HasColumnType("decimal(18,2)"); // AlisFiyati3, decimal(18,2) formatýnda
+            builder.Property(e => e.TrendyolStokMiktari)
+                   .HasColumnType("decimal(18,3)")
+                   .HasDefaultValue(0); // Trendyol iÃ§in stok miktarÄ±
 
-            builder.Property(e => e.SatisFiyati1)
-                   .HasColumnType("decimal(18,2)"); // SatisFiyati1, decimal(18,2) formatýnda
+            builder.Property(e => e.HepsiburadaStokMiktari)
+                   .HasColumnType("decimal(18,3)")
+                   .HasDefaultValue(0); // Hepsiburada iÃ§in stok miktarÄ±
 
-            builder.Property(e => e.SatisFiyati2)
-                   .HasColumnType("decimal(18,2)"); // SatisFiyati2, decimal(18,2) formatýnda
+            // **Stok Takip Tipi**
+            builder.Property(e => e.StokTakipTipi)
+                   .HasDefaultValue(1); // VarsayÄ±lan: BaÄŸÄ±msÄ±z
 
-            builder.Property(e => e.SatisFiyati3)
-                   .HasColumnType("decimal(18,2)"); // SatisFiyati3, decimal(18,2) formatýnda
+            // **Platform bazlÄ± fiyat yapÄ±sÄ±**
+            builder.Property(e => e.AlisFiyati)
+                   .HasColumnType("decimal(18,2)")
+                   .HasDefaultValue(0); // Ana alÄ±ÅŸ fiyatÄ±
+
+            builder.Property(e => e.ToplamFiyati)
+                   .HasColumnType("decimal(18,2)")
+                   .HasDefaultValue(0); // Toptan satÄ±ÅŸ fiyatÄ±
+
+            builder.Property(e => e.PerakendeFiyati)
+                   .HasColumnType("decimal(18,2)")
+                   .HasDefaultValue(0); // Perakende satÄ±ÅŸ fiyatÄ±
+
+            builder.Property(e => e.WebFiyati)
+                   .HasColumnType("decimal(18,2)")
+                   .HasDefaultValue(0); // Web sitesi fiyatÄ±
+
+            builder.Property(e => e.TrendyolFiyati)
+                   .HasColumnType("decimal(18,2)")
+                   .HasDefaultValue(0); // Trendyol fiyatÄ±
+
+            builder.Property(e => e.HepsiburadaFiyati)
+                   .HasColumnType("decimal(18,2)")
+                   .HasDefaultValue(0); // Hepsiburada fiyatÄ±
+
+            // **Fiyat Hesaplama Tipi**
+            builder.Property(e => e.FiyatHesaplamaTipi)
+                   .HasDefaultValue(1); // VarsayÄ±lan: BaÄŸÄ±msÄ±z
+
+            // **E-ticaret entegrasyonu iÃ§in gerekli alanlar**
+            builder.Property(e => e.TrendyolKodu)
+                   .HasMaxLength(100); // Trendyol Ã¼rÃ¼n kodu
+
+            builder.Property(e => e.HepsiburadaKodu)
+                   .HasMaxLength(100); // Hepsiburada Ã¼rÃ¼n kodu
+
+            builder.Property(e => e.WebKodu)
+                   .HasMaxLength(100); // Web sitesi Ã¼rÃ¼n kodu
+
+            // **Platformlar iÃ§in komisyon oranlarÄ±**
+            builder.Property(e => e.TrendyolKomisyon)
+                   .HasColumnType("decimal(5,2)")
+                   .HasDefaultValue(0); // Trendyol komisyon oranÄ± (%)
+
+            builder.Property(e => e.HepsiburadaKomisyon)
+                   .HasColumnType("decimal(5,2)")
+                   .HasDefaultValue(0); // Hepsiburada komisyon oranÄ± (%)
+
+            builder.Property(e => e.WebKomisyon)
+                   .HasColumnType("decimal(5,2)")
+                   .HasDefaultValue(0); // Web komisyon oranÄ± (%)
 
             builder.Property(e => e.MinStokMiktari)
-                   .HasColumnType("decimal(18,3)"); // MinStokMiktari, decimal(18,3) formatýnda
+                   .HasColumnType("decimal(18,3)"); // MinStokMiktari, decimal(18,3) formatÄ±nda
 
             builder.Property(e => e.MaxStokMiktari)
-                   .HasColumnType("decimal(18,3)"); // MaxStokMiktari, decimal(18,3) formatýnda
+                   .HasColumnType("decimal(18,3)"); // MaxStokMiktari, decimal(18,3) formatÄ±nda
 
             builder.Property(e => e.Aciklama)
-                   .HasMaxLength(500); // Aciklama, isteðe baðlý, maksimum uzunluk 500 karakter
+                   .HasMaxLength(500); // Aciklama, isteÄŸe baÄŸlÄ±, maksimum uzunluk 500 karakter
+                   
+            builder.Property(e => e.WebAciklama)
+                   .HasMaxLength(500); // Web sitesi iÃ§in aÃ§Ä±klama
+                   
+            builder.Property(e => e.SonGuncelleme)
+                   .HasColumnType("datetime2")
+                   .HasDefaultValueSql("GETDATE()"); // Son gÃ¼ncelleme tarihi
+                   
+            builder.Property(e => e.GuncelleyenKullaniciId)
+                   .HasDefaultValue(0); // GÃ¼ncelleyen kullanÄ±cÄ± ID
         }
     }
 }

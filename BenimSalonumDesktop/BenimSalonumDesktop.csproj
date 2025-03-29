@@ -11,11 +11,44 @@
   <ItemGroup>
     <PackageReference Include="FluentValidation" Version="11.11.0" />
     <PackageReference Include="FluentValidation.AspNetCore" Version="11.3.0" />
+    <PackageReference Include="Syncfusion.Grid.Windows" Version="28.2.12" />
+    <PackageReference Include="Syncfusion.Pdf.WinForms" Version="28.2.12" />
+    <PackageReference Include="Syncfusion.SfDataGrid.WinForms" Version="28.2.12" />
+    <PackageReference Include="Syncfusion.SfInput.WinForms" Version="28.2.12" />
+    <PackageReference Include="Syncfusion.Tools.Windows" Version="28.2.12" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\BenimSalonum.Entitites\BenimSalonum.Entities.csproj" />
     <ProjectReference Include="..\BenimSalonum.Tools\BenimSalonum.Tools.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Resources\Strings.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Strings.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Settings.Designer.cs">
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Resources\Strings.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Strings.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>BenimSalonumDesktop.Resources</CustomToolNamespace>
+    </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
   </ItemGroup>
 
 </Project>

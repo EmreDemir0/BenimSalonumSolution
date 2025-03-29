@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, ...</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, ...</value></resheader>
+  <data name="UsernameLabel" xml:space="preserve"><value>Kullanıcı Adı</value></data>
+  <data name="PasswordLabel" xml:space="preserve"><value>Şifre</value></data>
+  <data name="LoginButton" xml:space="preserve"><value>Giriş Yap</value></data>
+  <data name="ForgotPassword" xml:space="preserve"><value>Şifremi Unuttum</value></data>
+  <data name="LoginError" xml:space="preserve"><value>Giriş başarısız!</value></data>
+  <data name="TooManyAttempts" xml:space="preserve"><value>Çok fazla başarısız deneme. 5 dakika sonra tekrar deneyin.</value></data>
+  <data name="ResetSuccess" xml:space="preserve"><value>Şifre başarıyla güncellendi.</value></data>
+  <data name="ResetFail" xml:space="preserve"><value>Şifre sıfırlama başarısız.</value></data>
+  <data name="AllFieldsRequired" xml:space="preserve"><value>Tüm alanları doldurunuz.</value></data>
+  <data name="UsernamePlaceholder" xml:space="preserve"><value>Kullanıcı adınızı girin</value></data>
+  <data name="PasswordPlaceholder" xml:space="preserve"><value>Şifrenizi girin</value></data>
+  <data name="ShowPassword" xml:space="preserve"><value>Şifreyi göster</value></data>
+  <data name="HidePassword" xml:space="preserve"><value>Şifreyi gizle</value></data>
+  <data name="RetryAfterMessage" xml:space="preserve"><value>Lütfen {0} saniye sonra tekrar deneyin</value></data>
+</root>
