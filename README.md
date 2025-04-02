@@ -1,3 +1,119 @@
+*ENGLISH VERSION*
+------------
+*BenimSalonum - Salon Management System*
+
+Project Description*
+------------
+BenimSalonum is a comprehensive management system developed for beauty and care salons. 
+With its user-friendly interface, multi-device session management, customer tracking, appointment planning, and financial reporting features, it enables salon operators to efficiently manage their daily operations.
+
+*Features*
+------------
+- User Management and Security
+- JWT-based authentication system
+- Multi-device session management
+- Ability for users to control sessions on other devices
+- Two-factor authentication
+- Comprehensive user profile management
+- Role-based authorization system
+- Salon Management
+- Multiple branch management
+- Staff and working hours tracking
+- Stock and inventory management
+- Service catalog and pricing control
+- Customer Management
+- Comprehensive customer information management
+- Customer history and preferences tracking
+- CRM features and loyalty programs
+- Appointment System
+- Drag-and-drop appointment scheduling
+- Automatic appointment reminders
+- Conflict control and availability tracking
+- Online appointment integration
+- Financial Management
+- Sales and revenue tracking
+- Cash register management
+- E-Invoice integration
+- Financial reporting
+- System Management
+- Automatic backup system
+- System settings management
+- SMS ande Email notification integration
+- Language and localization support
+- Project Structure
+BenimSalonum is a solution developed using n-tier architecture:
+
+- BenimSalonumDesktop: Windows Forms-based user interface
+- BenimSalonumAPI: Web API services (RESTful API)
+- BenimSalonum.Entities: Data models, DTOs, and validation rules
+- BenimSalonum.Tools: Helper functions and tools
+*Technologies*
+------------
+- .NET Core: Modern and high-performance platform
+- Entity Framework Core: ORM (Object Relational Mapper)
+- JWT: JSON Web Token based authentication
+- Syncfusion: Modern UI controls (optional)
+- SQL Server: Database management system
+- Newtonsoft.Json: For JSON data Serialization/Deserialization
+  
+*Installation Guide*
+------------
+*Requirements*
+
+- Visual Studio 2022 (or above)
+- .NET Core 8.0 (or above)
+- SQL Server 2019 (or above)
+   
+*Database Setup*
+------------
+- Open SQL Server Management Studio
+- Create a new database: BenimSalonum
+- Apply migrations from the project:
+- CopyInsert
+* dotnet ef database update --project BenimSalonumAPI *
+Running the Project
+- Open the BenimSalonumSolution.sln file with Visual Studio
+Build the solution
+- First run the API project, then the Desktop application
+Configuration
+- For API connection address and other settings:
+
+- Edit the BenimSalonumDesktop/App.config file
+
+- Configure API settings in the BenimSalonumAPI/appsettings.json file
+
+*Screenshots*
+------------
+// UI INTERFACE DESIGN IN PROGRESS
+
+*License*
+------------
+BenimSalonum is licensed for personal and commercial use. All rights reserved © 2025.
+
+*Contact*
+------------
++90 543 650 31 69
+
+ak.emredemir@gmail.com
+
+*Development Notes*
+------------
+- Future Features
+- Mobile application integration
+- Online appointment system
+- Marketing and promotion management
+- Detailed analytics and reporting
+- Contributing
+  
+If you would like to contribute to the project, please create a fork and send a pull request. All contributions are valuable.
+
+*Version History*
+------------
+v1.0.0 (April 2025)
+
+*TURKISH VERSION*
+------------
+
 BenimSalonum - Salon Yönetim Sistemi
 
 *Proje Açıklaması*
