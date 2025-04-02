@@ -1,4 +1,3 @@
-﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.12.35728.132
@@ -7,7 +6,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BenimSalonumDesktop", "Beni
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BenimSalonumAPI", "BenimSalonumAPI\BenimSalonumAPI.csproj", "{5B5953B3-7100-4CA6-899F-E1704625646E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BenimSalonum.Entities", "BenimSalonum.Entitites\BenimSalonum.Entities.csproj", "{2CFE2244-273B-44FB-845D-5E951DC67C37}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BenimSalonum.Entities", "BenimSalonum.Entities\BenimSalonum.Entities.csproj", "{2CFE2244-273B-44FB-845D-5E951DC67C37}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BenimSalonum.Tools", "BenimSalonum.Tools\BenimSalonum.Tools.csproj", "{50000659-6F07-4797-AAE1-B8ECF84E5F80}"
 EndProject

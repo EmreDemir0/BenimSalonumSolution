@@ -4,6 +4,7 @@ using BenimSalonumAPI.DataAccess.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BenimSalonumAPI.Migrations
 {
     [DbContext(typeof(BenimSalonumContext))]
-    partial class BenimSalonumContextModelSnapshot : ModelSnapshot
+    [Migration("20250327070052_LisansVeFirmaEklendi")]
+    partial class LisansVeFirmaEklendi
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1506,90 +1509,6 @@ namespace BenimSalonumAPI.Migrations
                     b.ToTable("Kodlar");
                 });
 
-            modelBuilder.Entity("BenimSalonum.Entities.Tables.KullaniciAyarlarTable", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("CalismaBaslangicSaati")
-                        .IsRequired()
-                        .ValueGeneratedOnAdd()
-                        .HasMaxLength(10)
-                        .HasColumnType("nvarchar(10)")
-                        .HasDefaultValue("09:00");
-
-                    b.Property<string>("CalismaBitisSaati")
-                        .IsRequired()
-                        .ValueGeneratedOnAdd()
-                        .HasMaxLength(10)
-                        .HasColumnType("nvarchar(10)")
-                        .HasDefaultValue("18:00");
-
-                    b.Property<string>("Dil")
-                        .IsRequired()
-                        .ValueGeneratedOnAdd()
-                        .HasMaxLength(30)
-                        .HasColumnType("nvarchar(30)")
-                        .HasDefaultValue("tr-TR");
-
-                    b.Property<bool>("EmailBildirimAktif")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
-                        .HasDefaultValue(true);
-
-                    b.Property<int>("KullaniciId")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("OtomatikKilitlemeAktif")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
-                        .HasDefaultValue(false);
-
-                    b.Property<int>("OtomatikKilitlemeSuresi")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasDefaultValue(15);
-
-                    b.Property<int>("OturumSuresi")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasDefaultValue(120);
-
-                    b.Property<int>("RandevuHatirlatmaZamani")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasDefaultValue(60);
-
-                    b.Property<bool>("SMSBildirimAktif")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
-                        .HasDefaultValue(true);
-
-                    b.Property<DateTime>("SonGuncellenmeTarihi")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Tema")
-                        .IsRequired()
-                        .ValueGeneratedOnAdd()
-                        .HasMaxLength(30)
-                        .HasColumnType("nvarchar(30)")
-                        .HasDefaultValue("Light");
-
-                    b.Property<bool>("UygulamaIciBildirimAktif")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
-                        .HasDefaultValue(true);
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("KullaniciId");
-
-                    b.ToTable("KullaniciAyarlar", (string)null);
-                });
-
             modelBuilder.Entity("BenimSalonum.Entities.Tables.KullaniciLogTable", b =>
                 {
                     b.Property<int>("Id")
@@ -1689,10 +1608,6 @@ namespace BenimSalonumAPI.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<string>("Adres")
-                        .HasMaxLength(1000)
-                        .HasColumnType("nvarchar(1000)");
-
                     b.Property<bool>("Aktif")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bit")
@@ -1701,24 +1616,10 @@ namespace BenimSalonumAPI.Migrations
                     b.Property<bool>("AnaKullanici")
                         .HasColumnType("bit");
 
-                    b.Property<int>("BasarisizGirisDenemesi")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Cinsiyet")
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
-
-                    b.Property<DateTime?>("DogumTarihi")
-                        .HasColumnType("datetime2");
-
                     b.Property<bool>("Durumu")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bit")
                         .HasDefaultValue(true);
-
-                    b.Property<string>("Email")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
 
                     b.Property<int?>("FirmaId")
                         .HasColumnType("int");
@@ -1735,16 +1636,6 @@ namespace BenimSalonumAPI.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.Property<DateTime?>("HesapKilitlenmeTarihi")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("IkiFaktorluDogrulamaAnahtari")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<bool>("IkiFaktorluKimlikDogrulama")
-                        .HasColumnType("bit");
-
                     b.Property<DateTime>("KayitTarihi")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
@@ -1760,17 +1651,6 @@ namespace BenimSalonumAPI.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.Property<string>("ProfilResmiUrl")
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<string>("Sehir")
-                        .HasMaxLength(30)
-                        .HasColumnType("nvarchar(30)");
-
-                    b.Property<DateTime?>("SifreDegistirmeTarihi")
-                        .HasColumnType("datetime2");
-
                     b.Property<DateTime?>("SonGirisTarihi")
                         .HasColumnType("datetime2");
 
@@ -1778,10 +1658,6 @@ namespace BenimSalonumAPI.Migrations
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
-
-                    b.Property<string>("Telefon")
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
 
                     b.Property<int?>("YoneticiId")
                         .HasColumnType("int");
@@ -2156,12 +2032,6 @@ namespace BenimSalonumAPI.Migrations
                     b.Property<string>("Platform")
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
-
-                    b.Property<string>("ReasonRevoked")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("RevokedAt")
-                        .HasColumnType("datetime2");
 
                     b.Property<string>("Token")
                         .IsRequired()
@@ -3141,17 +3011,6 @@ namespace BenimSalonumAPI.Migrations
                         .IsRequired();
 
                     b.Navigation("HizliSatisGrup");
-                });
-
-            modelBuilder.Entity("BenimSalonum.Entities.Tables.KullaniciAyarlarTable", b =>
-                {
-                    b.HasOne("BenimSalonum.Entities.Tables.KullaniciTable", "Kullanici")
-                        .WithMany()
-                        .HasForeignKey("KullaniciId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Kullanici");
                 });
 
             modelBuilder.Entity("BenimSalonum.Entities.Tables.KullaniciLogTable", b =>

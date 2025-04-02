@@ -43,6 +43,7 @@ namespace BenimSalonumAPI.DataAccess.Context
         public DbSet<RandevuTable> Randevular { get; set; }
         public DbSet<DuyuruTable> Duyurular { get; set; }
         public DbSet<AyarlarTable> Ayarlar { get; set; }
+        public DbSet<KullaniciAyarlarTable> KullaniciAyarlar { get; set; }
 
         // E-Fatura WSDL entegrasyonu için yeni eklenen DbSet'ler
         public DbSet<EFaturaKontorTable> EFaturaKontorlar { get; set; }
@@ -51,6 +52,10 @@ namespace BenimSalonumAPI.DataAccess.Context
         
         // Gelişmiş loglama için yeni eklenen DbSet
         public DbSet<SistemLogTable> SistemLoglar { get; set; }
+        
+        // Lisans ve Firma için yeni eklenen DbSet'ler
+        public DbSet<FirmaTable> Firmalar { get; set; }
+        public DbSet<LisansTable> Lisanslar { get; set; }
 
         // 🔹 **Model mapping**
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -92,6 +97,11 @@ namespace BenimSalonumAPI.DataAccess.Context
             modelBuilder.ApplyConfiguration(new DuyuruTableMap());
             modelBuilder.ApplyConfiguration(new AyarlarTableMap());
             modelBuilder.ApplyConfiguration(new SistemLogTableMap());
+            
+            // Lisans ve Firma için yeni eklenen mappingler
+            modelBuilder.ApplyConfiguration(new FirmaTableMap());
+            modelBuilder.ApplyConfiguration(new LisansTableMap());
+            modelBuilder.ApplyConfiguration(new KullaniciAyarlarTableMap());
         }
     }
 }

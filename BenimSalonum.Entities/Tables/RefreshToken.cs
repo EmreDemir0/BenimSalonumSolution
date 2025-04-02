@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 namespace BenimSalonum.Entities.Tables
 {
@@ -14,7 +14,8 @@ namespace BenimSalonum.Entities.Tables
         public string? UserAgent { get; set; }
         public string? DeviceName { get; set; }     // Örn: iPhone 13, Chrome/Windows
         public string? Platform { get; set; }       // Örn: Web, Android, Windows, iOS
-
+        public DateTime? RevokedAt { get; set; }   // Token'ın iptal edilme tarihi
+        public string? ReasonRevoked { get; set; } // Token'ın iptal edilme nedeni
 
     }
 }

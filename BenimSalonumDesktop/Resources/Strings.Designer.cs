@@ -79,6 +79,33 @@ namespace BenimSalonumDesktop.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Şifreyi gizle.
+        /// </summary>
+        internal static string HidePassword {
+            get {
+                return ResourceManager.GetString("HidePassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Lisans Durumu: Aktif - {0} gün kaldı. ({1}).
+        /// </summary>
+        internal static string LicenseActive {
+            get {
+                return ResourceManager.GetString("LicenseActive", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Lisans Bilgisi Yükleniyor....
+        /// </summary>
+        internal static string LicenseInfoLoading {
+            get {
+                return ResourceManager.GetString("LicenseInfoLoading", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Giriş Yap.
         /// </summary>
         internal static string LoginButton {
@@ -106,6 +133,15 @@ namespace BenimSalonumDesktop.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Şifrenizi girin.
+        /// </summary>
+        internal static string PasswordPlaceholder {
+            get {
+                return ResourceManager.GetString("PasswordPlaceholder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Şifre sıfırlama başarısız..
         /// </summary>
         internal static string ResetFail {
@@ -124,6 +160,24 @@ namespace BenimSalonumDesktop.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Lütfen {0} saniye sonra tekrar deneyin.
+        /// </summary>
+        internal static string RetryAfterMessage {
+            get {
+                return ResourceManager.GetString("RetryAfterMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Şifreyi göster.
+        /// </summary>
+        internal static string ShowPassword {
+            get {
+                return ResourceManager.GetString("ShowPassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Çok fazla başarısız deneme. 5 dakika sonra tekrar deneyin..
         /// </summary>
         internal static string TooManyAttempts {
@@ -138,6 +192,15 @@ namespace BenimSalonumDesktop.Resources {
         internal static string UsernameLabel {
             get {
                 return ResourceManager.GetString("UsernameLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Kullanıcı adınızı girin.
+        /// </summary>
+        internal static string UsernamePlaceholder {
+            get {
+                return ResourceManager.GetString("UsernamePlaceholder", resourceCulture);
             }
         }
     }

@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
@@ -19,7 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\BenimSalonum.Entitites\BenimSalonum.Entities.csproj" />
+    <ProjectReference Include="..\BenimSalonum.Entities\BenimSalonum.Entities.csproj" />
     <ProjectReference Include="..\BenimSalonum.Tools\BenimSalonum.Tools.csproj" />
   </ItemGroup>
 
@@ -49,6 +49,11 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Pictures\" />
+    <Folder Include="Properties\" />
   </ItemGroup>
 
 </Project>

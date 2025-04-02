@@ -9,6 +9,9 @@ using System.Security.Claims;
 using BenimSalonumAPI.Models;
 using System.Threading.Tasks;
 using BenimSalonumAPI.Services;
+using System;
+using System.Linq;
+using BenimSalonum.Entities.DTOs;
 
 namespace BenimSalonumAPI.Controllers
 {
@@ -93,38 +96,59 @@ namespace BenimSalonumAPI.Controllers
                 return Unauthorized("Geçersiz kullanıcı adı veya şifre.");
             }
 
+            // Aktif oturumları kontrol et (otomatik olarak iptal etmeden önce)
+            var existingSessions = await _context.RefreshTokens
+                .Where(r => r.UserId == user.Id.ToString() && r.IsRevoked == false && 
+                      !(r.DeviceName == deviceName && r.Platform == platform && r.UserAgent == userAgent))
+                .Select(r => new {
+                    r.Id,
+                    r.DeviceName,
+                    r.Platform,
+                    r.CreatedAt,
+                    r.IpAddress
+                })
+                .ToListAsync();
+                
+            // Yeni Access Token ve Refresh Token üret
+            var accessToken = await _jwtTokenService.GenerateToken(user.Id);
+            
+            // Refresh token'ı doğru parametrelerle oluştur
+            var refreshTokenObj = _tokenService.GenerateRefreshToken(user.Id.ToString(), ipAddress, userAgent, deviceName, platform);
+            var refreshToken = refreshTokenObj.Token;
+            
+            // Kullanıcıya mevcut oturumlar hakkında bilgi ver
+            if (existingSessions.Any())
+            {
+                return Ok(new { 
+                    hasActiveSessions = true,
+                    activeSessions = existingSessions,
+                    pendingToken = accessToken,
+                    pendingRefreshToken = refreshToken,
+                    userId = user.Id,
+                    message = "Aktif oturumlarınız var. Nasıl devam etmek istersiniz?"
+                });
+            }
+
             // Aynı cihazdaki önceki tokenları iptal et
             await _refreshTokenRepo.RevokeDuplicateDeviceTokens(user.Id.ToString(), deviceName, platform, userAgent);
 
-            // Yeni Access Token üret
-            var accessToken = await _jwtTokenService.GenerateToken(user.Id);
+            // Yeni token'ı kaydet ve kullanıcıya dön
+            await _refreshTokenRepo.SaveRefreshToken(refreshTokenObj);
 
-            // Yeni Refresh Token oluştur ve kaydet
-            var refreshToken = _tokenService.GenerateRefreshToken(
-                user.Id.ToString(), ipAddress, userAgent, deviceName, platform
-            );
-            await _refreshTokenRepo.SaveRefreshToken(refreshToken);
+            // Kullanıcının son giriş tarihini güncelle 
+            user.SonGirisTarihi = DateTime.UtcNow;
 
-            // Kullanıcı girişini logla
-            await _logService.LogKullaniciGirisAsync(user.KullaniciAdi, true, ipAddress);
-            await _logService.LogInformationAsync(
-                $"Kullanıcı başarıyla giriş yaptı: {user.KullaniciAdi}", 
-                "AuthController",
-                LogVisibility.All,
-                new { IpAddress = ipAddress, DeviceName = deviceName, Platform = platform }
-            );
+            await _context.SaveChangesAsync();
 
-            // Rolü null ise "User" olarak ata
-            var role = user.Gorevi ?? "User";
+            await _logService.LogKullaniciGirisAsync(userDto.KullaniciAdi, true, ipAddress);
+            await _logService.LogInformationAsync($"Kullanıcı başarıyla giriş yaptı: {userDto.KullaniciAdi}", "AuthController");
 
             return Ok(new
             {
-                KullaniciAdi = user.KullaniciAdi,
-                Adi = user.Adi,
-                Soyadi = user.Soyadi,
                 accessToken,
-                refreshToken = refreshToken.Token,
-                role // Burada artık null olmayan değeri kullanıyoruz
+                refreshToken,
+                hasActiveSessions = false,
+                message = "Başarıyla giriş yapıldı"
             });
         }
 
@@ -363,6 +387,71 @@ namespace BenimSalonumAPI.Controllers
         public IActionResult AdminOnlyEndpoint()
         {
             return Ok("Bu endpoint sadece Admin kullanıcılar tarafından erişilebilir!");
+        }
+
+        [HttpPost("logout-other-sessions")]
+        [Authorize]
+        public async Task<IActionResult> LogoutOtherSessions([FromBody] LogoutOtherSessionsDto dto)
+        {
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (string.IsNullOrEmpty(userId))
+                return Unauthorized(new { message = "Yetkisiz erişim" });
+            
+            // Cihaz bilgileri
+            var ipAddress = HttpContext.Connection.RemoteIpAddress?.ToString() ?? "Bilinmiyor";
+            var userAgent = Request.Headers["User-Agent"].ToString();
+            var deviceName = Request.Headers["X-Device-Name"].ToString() ?? "Bilinmiyor cihaz";
+            var platform = Request.Headers["X-Platform"].ToString() ?? "Bilinmiyor platform";
+            
+            // Diğer aktif oturumları kapat
+            var existingTokens = await _context.RefreshTokens
+                .Where(r => r.UserId == userId && r.IsRevoked == false && 
+                      !(r.DeviceName == deviceName && r.Platform == platform && r.UserAgent == userAgent))
+                .ToListAsync();
+            
+            foreach (var token in existingTokens)
+            {
+                token.IsRevoked = true;
+                token.RevokedAt = DateTime.UtcNow;
+                token.ReasonRevoked = "Kullanıcı tarafından sonlandırıldı";
+            }
+            
+            // Yeni refresh token'ı kaydet
+            var refreshTokenObj = _tokenService.GenerateRefreshToken(userId, ipAddress, userAgent, deviceName, platform);
+            refreshTokenObj.Token = dto.NewRefreshToken;
+            
+            _context.RefreshTokens.Add(refreshTokenObj);
+            await _context.SaveChangesAsync();
+            
+            await _logService.LogInformationAsync($"Diğer oturumlar kapatıldı. Kullanıcı ID: {userId}", "AuthController");
+            
+            return Ok(new { message = "Diğer oturumlar kapatıldı ve yeni oturum başlatıldı" });
+        }
+
+        [HttpPost("keep-all-sessions")]
+        [Authorize]
+        public async Task<IActionResult> KeepAllSessions([FromBody] KeepAllSessionsDto dto)
+        {
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (string.IsNullOrEmpty(userId))
+                return Unauthorized(new { message = "Yetkisiz erişim" });
+            
+            // Cihaz bilgileri
+            var ipAddress = HttpContext.Connection.RemoteIpAddress?.ToString() ?? "Bilinmiyor";
+            var userAgent = Request.Headers["User-Agent"].ToString();
+            var deviceName = Request.Headers["X-Device-Name"].ToString() ?? "Bilinmiyor cihaz";
+            var platform = Request.Headers["X-Platform"].ToString() ?? "Bilinmiyor platform";
+            
+            // Yeni oturumu ekle (diğerlerini kapatmadan)
+            var refreshTokenObj = _tokenService.GenerateRefreshToken(userId, ipAddress, userAgent, deviceName, platform);
+            refreshTokenObj.Token = dto.NewRefreshToken;
+            
+            _context.RefreshTokens.Add(refreshTokenObj);
+            await _context.SaveChangesAsync();
+            
+            await _logService.LogInformationAsync($"Tüm oturumlar aktif bırakıldı. Kullanıcı ID: {userId}", "AuthController");
+            
+            return Ok(new { message = "Yeni oturum başlatıldı, diğer oturumlar aktif" });
         }
     }
 }

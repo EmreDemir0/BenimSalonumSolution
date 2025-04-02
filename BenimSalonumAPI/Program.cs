@@ -18,6 +18,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using BenimSalonumAPI;
 using BenimSalonumAPI.Services;
+using BenimSalonumAPI.Services.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -54,6 +55,8 @@ builder.Services.AddScoped<RefreshTokenRepository>();
 // Yeni eklenen servisler
 builder.Services.AddScoped<ILogService, LogService>();
 builder.Services.AddScoped<OrkestraEFaturaService>();
+// Lisans servisi
+builder.Services.AddScoped<ILisansService, LisansService>();
 
 // 🔹 **HTTP Context Accessor**
 builder.Services.AddHttpContextAccessor();

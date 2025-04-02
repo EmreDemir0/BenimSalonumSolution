@@ -42,7 +42,7 @@
             // txtUsername
             // 
             txtUsername.BeforeTouchSize = new Size(549, 23);
-            txtUsername.Location = new Point(144, 96);
+            txtUsername.Location = new Point(136, 146);
             txtUsername.Name = "txtUsername";
             txtUsername.Size = new Size(549, 23);
             txtUsername.TabIndex = 0;
@@ -51,7 +51,7 @@
             // txtQuestion
             // 
             txtQuestion.BeforeTouchSize = new Size(549, 23);
-            txtQuestion.Location = new Point(144, 125);
+            txtQuestion.Location = new Point(136, 175);
             txtQuestion.Name = "txtQuestion";
             txtQuestion.Size = new Size(549, 23);
             txtQuestion.TabIndex = 1;
@@ -60,7 +60,7 @@
             // txtAnswer
             // 
             txtAnswer.BeforeTouchSize = new Size(549, 23);
-            txtAnswer.Location = new Point(144, 154);
+            txtAnswer.Location = new Point(136, 204);
             txtAnswer.Name = "txtAnswer";
             txtAnswer.Size = new Size(549, 23);
             txtAnswer.TabIndex = 2;
@@ -69,7 +69,7 @@
             // txtNewPassword
             // 
             txtNewPassword.BeforeTouchSize = new Size(549, 23);
-            txtNewPassword.Location = new Point(144, 183);
+            txtNewPassword.Location = new Point(136, 233);
             txtNewPassword.Name = "txtNewPassword";
             txtNewPassword.Size = new Size(549, 23);
             txtNewPassword.TabIndex = 3;
@@ -78,11 +78,10 @@
             // btnReset
             // 
             btnReset.Font = new Font("Segoe UI Semibold", 9F);
-            btnReset.Location = new Point(431, 256);
+            btnReset.Location = new Point(589, 274);
             btnReset.Name = "btnReset";
             btnReset.Size = new Size(96, 28);
             btnReset.TabIndex = 4;
-            btnReset.Text = "sfButton1";
             btnReset.Click += btnReset_Click;
             // 
             // ResetPasswordForm
