@@ -119,7 +119,7 @@ Kullanıcı dostu arayüzü, çok cihazlı oturum yönetimi, müşteri takibi, r
 
 *Projeyi Çalıştırma*
 ------------
--BenimSalonumSolution.sln dosyasını Visual Studio ile açın
+- BenimSalonumSolution.sln dosyasını Visual Studio ile açın
 
 Çözümü derleyin
 
