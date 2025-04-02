@@ -77,23 +77,23 @@ Kullanıcı dostu arayüzü, çok cihazlı oturum yönetimi, müşteri takibi, r
 
 - BenimSalonumAPI: Web API servisleri (RESTful API)
 
--BenimSalonum.Entities: Veri modelleri, DTOs ve validasyon kuralları
+- BenimSalonum.Entities: Veri modelleri, DTOs ve validasyon kuralları
 
 - BenimSalonum.Tools: Yardımcı fonksiyonlar ve araçlar
 
 *Teknolojiler*
 ------------
--.NET Core: Modern ve yüksek performanslı platform
+- .NET Core: Modern ve yüksek performanslı platform
 
--Entity Framework Core: ORM (Nesne İlişkisel Eşleyici)
+- Entity Framework Core: ORM (Nesne İlişkisel Eşleyici)
 
--JWT: JSON Web Token tabanlı kimlik doğrulama
+- JWT: JSON Web Token tabanlı kimlik doğrulama
 
--Syncfusion: Modern UI kontrolleri (opsiyonel)
+- Syncfusion: Modern UI kontrolleri (opsiyonel)
 
--SQL Server: Veritabanı yönetim sistemi
+- SQL Server: Veritabanı yönetim sistemi
 
--Newtonsoft.Json: JSON verileri için Serialization/Deserialization
+- Newtonsoft.Json: JSON verileri için Serialization/Deserialization
 
 *Kurulum Kılavuzu*
 ------------
@@ -123,11 +123,11 @@ Kullanıcı dostu arayüzü, çok cihazlı oturum yönetimi, müşteri takibi, r
 
 Çözümü derleyin
 
--Önce API projesini, sonra Desktop uygulamasını çalıştırın
+- Önce API projesini, sonra Desktop uygulamasını çalıştırın
 
 Konfigürasyon
 
--API bağlantı adresi ve diğer ayarlar için:
+- API bağlantı adresi ve diğer ayarlar için:
 
 * BenimSalonumDesktop/App.config dosyasını düzenleyin
 
